@@ -1,0 +1,1605 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KI-Kodex Generator · Für deinen Betrieb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+:root{
+  --or:#00ABBE;--or-dk:#008FA0;--or-lt:#E5F8FA;
+  --nv:#0B1F3B;--nv-lt:#E8EDF5;
+  --bl:#00ABBE;--bl-lt:#E5F8FA;
+  --gr:#00BDA5;--gr-lt:#E5FAF7;
+  --bg:#EEF3FA;--sf:#FAFAFA;
+  --bd:#E0E4EA;--bd2:#CBD1DB;
+  --t1:#1C2D3D;--t2:#4A5568;--t3:#8A9BB0;
+  --rm:10px;--rl:16px;--rx:24px;
+  --s1:0 1px 3px rgba(0,0,0,.07);--s2:0 4px 12px rgba(0,0,0,.08);--s3:0 12px 32px rgba(0,0,0,.10);
+  --fd:'Google Sans',sans-serif;--fb:'Roboto',sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:var(--fb);background:var(--bg);color:var(--t1);line-height:1.6}
+
+nav{position:sticky;top:0;z-index:100;background:#0B1F3B;backdrop-filter:blur(10px);border-bottom:none;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
+.logo{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-size:15px;font-weight:700;color:#fff;text-decoration:none}
+.logo-sq{width:28px;height:28px;border-radius:7px;background:var(--or);display:flex;align-items:center;justify-content:center}
+.nav-pill{font-size:11px;padding:3px 10px;background:rgba(0,171,190,.18);color:#7EDCEA;border-radius:20px;font-weight:500;border:1px solid rgba(0,171,190,.3)}
+
+/* FIRM BANNER */
+.firm-banner{background:#FAFAFA;border-bottom:1px solid var(--bd);padding:12px 2rem;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;box-shadow:var(--s1)}
+.firm-banner label{font-family:var(--fd);font-size:13px;font-weight:600;color:var(--nv);white-space:nowrap}
+.firm-input{font-family:var(--fb);font-size:14px;color:var(--t1);background:var(--nv-lt);border:1.5px solid var(--bd);border-radius:var(--rm);padding:8px 13px;outline:none;width:260px;transition:border-color .15s,box-shadow .15s}
+.firm-input:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(0,171,190,.15)}
+.firm-hint{font-size:11px;color:var(--t3);display:flex;align-items:center;gap:4px}
+
+/* HERO */
+.hero{background:linear-gradient(155deg,#EEF3FA 0%,#dce8f5 100%);border-bottom:1px solid var(--bd);padding:58px 2rem 70px;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 560px 380px at 8% 55%,rgba(0,171,190,.08) 0%,transparent 70%),radial-gradient(ellipse 480px 340px at 92% 18%,rgba(11,31,59,.05) 0%,transparent 70%);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:6px;background:var(--or-lt);color:var(--or-dk);border:1px solid rgba(0,171,190,.25);border-radius:20px;font-size:12px;font-weight:500;padding:4px 13px;margin-bottom:18px}
+.hero h1{font-family:var(--fd);font-size:clamp(22px,4.2vw,42px);font-weight:700;color:var(--nv);max-width:620px;margin:0 auto 14px;line-height:1.18;letter-spacing:-.4px}
+.hero h1 em{font-style:normal;color:var(--or)}
+.hero p{font-size:15px;color:var(--t2);max-width:480px;margin:0 auto 28px;line-height:1.65}
+.badges{display:flex;flex-wrap:wrap;justify-content:center;gap:6px}
+.badge{display:inline-flex;align-items:center;gap:5px;background:#fff;border:1px solid var(--bd);border-radius:20px;font-size:11px;color:var(--t2);padding:4px 11px;box-shadow:var(--s1)}
+.dot{width:6px;height:6px;border-radius:50%}
+
+/* FEATURES */
+.feats{display:flex;max-width:800px;margin:-22px auto 0;padding:0 1.5rem;gap:10px;position:relative;z-index:10}
+.feat{flex:1;background:#FAFAFA;border:1px solid var(--bd);border-radius:var(--rl);padding:15px 17px;text-align:center;box-shadow:var(--s2);transition:transform .2s,box-shadow .2s}
+.feat:hover{transform:translateY(-2px);box-shadow:var(--s3)}
+.feat-ic{width:34px;height:34px;border-radius:7px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:16px}
+.feat h3{font-family:var(--fd);font-size:12px;font-weight:600;color:var(--nv);margin-bottom:2px}
+.feat p{font-size:11px;color:var(--t3);line-height:1.4}
+
+/* MAIN */
+.main{max-width:820px;margin:46px auto 80px;padding:0 1.5rem}
+
+/* CARDS */
+.card{background:#FAFAFA;border:1px solid var(--bd);border-radius:var(--rl);padding:22px 22px 18px;margin-bottom:12px;box-shadow:var(--s1)}
+.card-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.step{width:28px;height:28px;border-radius:50%;background:var(--or);color:#fff;font-family:var(--fd);font-size:12px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.card-head h2{font-family:var(--fd);font-size:14px;font-weight:600;color:var(--nv)}
+.card-head p{font-size:11px;color:var(--t3);margin-top:1px}
+
+/* FIELDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:11px;font-weight:500;color:var(--t2)}
+.field select,.field textarea,.field input[type=text]{font-family:var(--fb);font-size:13px;color:var(--t1);background:#FAFAFA;border:1.5px solid var(--bd);border-radius:var(--rm);padding:8px 11px;outline:none;transition:border-color .15s,box-shadow .15s;width:100%}
+.field select:focus,.field textarea:focus{border-color:var(--or);box-shadow:0 0 0 3px rgba(0,171,190,.14)}
+.field textarea{resize:vertical;min-height:60px;line-height:1.5}
+.field-hint{font-size:10px;color:var(--t3);margin-top:2px}
+
+/* TAGS */
+.tag-wrap{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.tag{padding:4px 11px;border:1.5px solid var(--bd);border-radius:20px;font-size:11px;cursor:pointer;color:var(--t2);background:#FAFAFA;transition:all .12s;user-select:none}
+.tag:hover{border-color:var(--or);color:var(--or-dk);background:var(--or-lt)}
+.tag.on{background:var(--or-lt);border-color:var(--or);color:var(--or-dk);font-weight:500}
+
+/* CHECKS */
+.checks2{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:4px}
+.checks2 label{display:flex;align-items:flex-start;gap:7px;font-size:11px;cursor:pointer;line-height:1.5;color:var(--t2)}
+.checks2 label input{margin-top:2px;flex-shrink:0;accent-color:var(--or)}
+
+/* RADIO CARDS */
+.rg{display:flex;gap:7px;margin-top:5px}
+.rc{flex:1;border:1.5px solid var(--bd);border-radius:var(--rm);padding:9px 11px;cursor:pointer;transition:all .12s;background:#FAFAFA}
+.rc:hover{border-color:var(--or);background:var(--or-lt)}
+.rc input{display:none}
+.rc.on{border-color:var(--or);background:var(--or-lt);box-shadow:0 0 0 3px rgba(0,171,190,.12)}
+.rc .rt{font-size:12px;font-weight:500;color:var(--nv)}
+.rc.on .rt{color:var(--or-dk)}
+.rc .rs{font-size:10px;color:var(--t3);margin-top:1px}
+
+.hr{height:1px;background:var(--bd);margin:13px 0}
+
+/* GENERATE */
+.gen-wrap{text-align:center;margin-top:6px}
+.gen-btn{display:inline-flex;align-items:center;gap:8px;padding:13px 34px;background:var(--or);color:#fff;border:none;border-radius:var(--rx);font-family:var(--fd);font-size:14px;font-weight:600;cursor:pointer;box-shadow:0 4px 14px rgba(0,171,190,.28);transition:background .15s,transform .15s,box-shadow .15s}
+.gen-btn:hover{background:var(--or-dk);transform:translateY(-2px);box-shadow:0 8px 20px rgba(0,171,190,.34)}
+.gen-btn:disabled{background:var(--bd2);color:var(--t3);box-shadow:none;cursor:not-allowed;transform:none}
+.gen-hint{font-size:10px;color:var(--t3);margin-top:7px}
+
+/* PROGRESS */
+.prog-wrap{margin-top:14px;display:none}
+.prog-wrap.on{display:block}
+.prog-lbl{font-size:12px;color:var(--t2);text-align:center;margin-bottom:7px}
+.prog-track{height:3px;background:var(--bd);border-radius:3px;overflow:hidden}
+.prog-bar{height:100%;background:var(--or);border-radius:3px;animation:prg 2s ease-in-out infinite}
+@keyframes prg{0%{width:0%;margin-left:0}50%{width:55%;margin-left:20%}100%{width:0%;margin-left:100%}}
+
+/* OUTPUT */
+.out-wrap{background:#FAFAFA;border:1px solid var(--bd);border-radius:var(--rl);margin-top:22px;overflow:hidden;box-shadow:var(--s3);display:none}
+.out-wrap.on{display:block}
+.out-bar{background:var(--nv);padding:15px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.out-bar h3{font-family:var(--fd);font-size:14px;font-weight:600;color:#fff}
+.out-bar p{font-size:10px;color:rgba(255,255,255,.48);margin-top:2px}
+.btns{display:flex;gap:6px}
+.btn-ol{display:inline-flex;align-items:center;gap:5px;padding:6px 12px;background:transparent;border:1.5px solid rgba(255,255,255,.28);border-radius:var(--rm);color:rgba(255,255,255,.82);font-size:11px;font-weight:500;cursor:pointer;transition:all .12s;font-family:var(--fb)}
+.btn-ol:hover{background:rgba(255,255,255,.1);color:#fff}
+.btn-pdf{display:inline-flex;align-items:center;gap:5px;padding:6px 14px;background:var(--or);border:none;border-radius:var(--rm);color:#fff;font-size:11px;font-weight:600;cursor:pointer;transition:background .12s;font-family:var(--fb)}
+.btn-pdf:hover{background:var(--or-dk)}
+.btn-pdf:disabled{background:#aaa;cursor:not-allowed}
+.out-body{padding:26px 30px}
+#out{font-size:13px;line-height:1.95;color:var(--t1);white-space:pre-wrap;font-family:var(--fb)}
+
+footer{background:var(--nv);color:rgba(255,255,255,.4);text-align:center;padding:24px 2rem;font-size:11px}
+footer strong{color:rgba(255,255,255,.7)}
+
+@media(max-width:600px){
+  .feats,.rg{flex-direction:column}.g2,.g3,.checks2{grid-template-columns:1fr}
+  .card{padding:15px 13px}.out-body{padding:16px 13px}
+  .hero{padding:36px 1.5rem 48px}.out-bar{flex-direction:column;align-items:flex-start}
+  .firm-banner{flex-direction:column;align-items:flex-start}.firm-input{width:100%}
+}
+.card{animation:fu .28s ease both}
+@keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.card:nth-child(n){animation-delay:calc(var(--i,0)*.04s)}
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="logo" href="#">
+    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="height:28px;object-fit:contain;filter:brightness(1)">
+  </a>
+  <span style="font-family:var(--fd);font-size:14px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.01em">KI-Kodex Generator</span>
+  <span class="nav-pill">Kostenlos · Kein Konto · Keine Speicherung</span>
+</nav>
+
+<section class="hero">
+  <div class="eyebrow">
+    <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.5 5H13L9.5 7.5L11 12L7 9L3 12L4.5 7.5L1 5H5.5L7 1Z" fill="currentColor"/></svg>
+    Für Hotels, Gastronomie, Logistik, Handwerk & Co.
+  </div>
+  <h1>Klare KI-Regeln für dein Team —<br>in <em>3 Minuten</em></h1>
+  <p>Beantworte ein paar Fragen zu deinem Betrieb. Wir erstellen daraus einen fertigen KI-Verhaltenskodex — als PDF zum Ausdrucken.</p>
+  <div class="badges">
+    <span class="badge"><span class="dot" style="background:#00ABBE"></span>DSGVO-konform</span>
+    <span class="badge"><span class="dot" style="background:#00ABBE"></span>EU AI Act berücksichtigt</span>
+    <span class="badge"><span class="dot" style="background:#0B1F3B"></span>PDF-Download</span>
+    <span class="badge"><span class="dot" style="background:#7EDCEA"></span>Keine Datenspeicherung</span>
+  </div>
+</section>
+
+<div class="feats">
+  <div class="feat"><div class="feat-ic" style="background:var(--or-lt)">✍️</div><h3>Formular ausfüllen</h3><p>Einfach, keine Fachkenntnis nötig</p></div>
+  <div class="feat"><div class="feat-ic" style="background:#E5F8FB">📋</div><h3>KI-Kodex wird erstellt</h3><p>Vollständig & branchenspezifisch</p></div>
+  <div class="feat"><div class="feat-ic" style="background:#E5FAF7">📄</div><h3>PDF herunterladen</h3><p>Unterschreiben lassen & fertig</p></div>
+</div>
+
+<main class="main">
+
+  <!-- 0 PLATZHALTER -->
+  <div class="card" style="--i:1">
+    <div class="card-head">
+      <div class="step" style="background:var(--nv)">✦</div>
+      <div><h2>Ihre Angaben für den Kodex</h2><p>Optional — nur temporär im Browser, keine Speicherung. Felder die Sie leer lassen erscheinen als [PLATZHALTER].</p></div>
+    </div>
+    <div class="g2">
+      <div class="field">
+        <label>Betriebsname</label>
+        <input type="text" id="firmenname" placeholder="z. B. Hotel Sonnenhof, Brauerei Muster GmbH …" maxlength="80">
+      </div>
+      <div class="field">
+        <label>Name KI-Ansprechperson</label>
+        <input type="text" id="ph_ansprechperson" placeholder="z. B. Max Mustermann" maxlength="60">
+      </div>
+      <div class="field">
+        <label>E-Mail KI-Ansprechperson</label>
+        <input type="text" id="ph_email" placeholder="z. B. ki@muster-gmbh.de" maxlength="80">
+      </div>
+      <div class="field">
+        <label>Gültig ab (Datum)</label>
+        <input type="text" id="ph_datum" placeholder="z. B. 01.06.2025" maxlength="20">
+      </div>
+      <div class="field">
+        <label>Name Geschäftsführung</label>
+        <input type="text" id="ph_gf" placeholder="z. B. Maria Muster" maxlength="60">
+      </div>
+      <div class="field">
+        <label>Nächste Revision</label>
+        <input type="text" id="ph_revision" placeholder="z. B. 01.06.2026" maxlength="20">
+      </div>
+    </div>
+    <div style="margin-top:10px;padding:8px 12px;background:var(--nv-lt);border-radius:var(--rm);font-size:11px;color:var(--t2);display:flex;align-items:center;gap:8px">
+      <svg width="13" height="13" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#8A9BB0" stroke-width="1.2"/><path d="M7 6.5v3M7 4.5v.5" stroke="#8A9BB0" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Alle Eingaben bleiben lokal in Ihrem Browser — keine Daten werden übertragen oder gespeichert.
+    </div>
+  </div>
+
+  <!-- 1 BETRIEB -->
+  <div class="card" style="--i:2">
+    <div class="card-head"><div class="step">1</div><div><h2>Ihr Betrieb</h2><p>Bestimmt Branchenbeispiele, Ton und spezifische Regelungen</p></div></div>
+    <div class="g2">
+      <div class="field">
+        <label>Branche</label>
+        <select id="branche">
+          <option value="">Bitte wählen …</option>
+          <optgroup label="Gastgewerbe & Tourismus">
+            <option>Hotel / Unterkunft</option><option>Restaurant / Gastronomie</option>
+            <option>Reisebüro / Touristik</option><option>Catering / Eventgastronomie</option>
+          </optgroup>
+          <optgroup label="Lebensmittel & Getränke">
+            <option>Getränkehersteller</option><option>Lebensmittelproduktion</option><option>Bäckerei / Konditorei</option>
+          </optgroup>
+          <optgroup label="Logistik & Handel">
+            <option>Spedition / Logistik</option><option>Einzelhandel / Verkauf</option>
+            <option>Großhandel</option><option>E-Commerce / Versandhandel</option>
+          </optgroup>
+          <optgroup label="Handwerk & Industrie">
+            <option>Handwerksbetrieb</option><option>Produktion / Fertigung</option><option>Baugewerbe</option>
+          </optgroup>
+          <optgroup label="Dienstleistungen">
+            <option>Steuerberatung / Kanzlei</option><option>Marketing / Agentur</option>
+            <option>IT-Dienstleister</option><option>Gesundheit / Pflege</option>
+            <option>Reinigung / Facility Management</option><option>Sonstiger Dienstleister</option>
+          </optgroup>
+        </select>
+      </div>
+      <div class="field">
+        <label>Mitarbeitende</label>
+        <select id="groesse">
+          <option value="mini">1–9 (Kleinstbetrieb)</option>
+          <option value="klein">10–49 (Kleines Unternehmen)</option>
+          <option value="mittel">50–249 (Mittelstand)</option>
+          <option value="gross">250+ Mitarbeitende</option>
+        </select>
+      </div>
+    </div>
+    <div class="g2" style="margin-top:10px">
+      <div class="field">
+        <label>KI-Erfahrung im Team</label>
+        <select id="erfahrung">
+          <option value="wenig">Gering — die meisten fangen gerade an</option>
+          <option value="mittel">Gemischt — einige nutzen KI bereits aktiv</option>
+          <option value="viel">Gut — KI ist schon Teil des Alltags</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Gewünschter Kodex-Stil</label>
+        <div class="rg" id="tonGroup" style="margin-top:4px">
+          <label class="rc on" onclick="selRad(this)"><input type="radio" name="ton" value="locker" checked><div class="rt">😊 Wir-Stil</div><div class="rs">Freundlich & motivierend</div></label>
+          <label class="rc" onclick="selRad(this)"><input type="radio" name="ton" value="formal"><div class="rt">📋 Förmlich</div><div class="rs">Sie-Anrede, strukturiert</div></label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 KI-NUTZUNG -->
+  <div class="card" style="--i:2">
+    <div class="card-head"><div class="step">2</div><div><h2>KI-Tools & Anwendungsfälle</h2><p>Freigegebene Tools erscheinen im Kodex — Mehrfachauswahl</p></div></div>
+    <div class="field">
+      <label>Freigegebene KI-Werkzeuge (Kapitel 6–8 des Kodex)</label>
+      <div class="tag-wrap" id="toolTags">
+        <div class="tag" onclick="tog(this)">ChatGPT</div>
+        <div class="tag" onclick="tog(this)">Claude (Anthropic)</div>
+        <div class="tag" onclick="tog(this)">Microsoft Copilot</div>
+        <div class="tag" onclick="tog(this)">Google Gemini</div>
+        <div class="tag" onclick="tog(this)">DeepL Übersetzer</div>
+        <div class="tag" onclick="tog(this)">Midjourney / DALL·E</div>
+        <div class="tag" onclick="tog(this)">Canva KI-Features</div>
+        <div class="tag" onclick="tog(this)">KI-Chatbot (Kundenservice)</div>
+        <div class="tag" onclick="tog(this)">KI-Buchhaltung / DATEV KI</div>
+        <div class="tag" onclick="tog(this)">Routenplanung-KI</div>
+        <div class="tag" onclick="tog(this)">KI-Dienstplanung</div>
+        <div class="tag" onclick="tog(this)">Noch nicht festgelegt</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="field">
+      <label>Haupteinsatzbereiche im Betrieb</label>
+      <div class="tag-wrap" id="zweckTags">
+        <div class="tag" onclick="tog(this)">Texte & E-Mails schreiben</div>
+        <div class="tag" onclick="tog(this)">Recherche & Wissensaufbereitung</div>
+        <div class="tag" onclick="tog(this)">Kundenkommunikation</div>
+        <div class="tag" onclick="tog(this)">Übersetzungen</div>
+        <div class="tag" onclick="tog(this)">Bild- & Mediengenerierung</div>
+        <div class="tag" onclick="tog(this)">Planung & Organisation</div>
+        <div class="tag" onclick="tog(this)">Datenanalyse & Berichte</div>
+        <div class="tag" onclick="tog(this)">Ideenfindung & Kreativarbeit</div>
+        <div class="tag" onclick="tog(this)">Prozessautomatisierung</div>
+        <div class="tag" onclick="tog(this)">Codegenerierung</div>
+        <div class="tag" onclick="tog(this)">Präsentationen & Visualisierungen</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 VERBOTE & SCHWERPUNKTE -->
+  <div class="card" style="--i:3">
+    <div class="card-head"><div class="step">3</div><div><h2>Verbote & Schwerpunkte</h2><p>Fließt direkt in Kapitel 4, 5, 7 und 12 (Verstöße) ein</p></div></div>
+    <div class="field">
+      <label>Explizite Verbote (werden im Kodex mit ✘ hervorgehoben)</label>
+      <div class="tag-wrap" id="verbotTags">
+        <div class="tag on" onclick="tog(this)">Kundendaten in öffentliche KI eingeben</div>
+        <div class="tag on" onclick="tog(this)">Geschäftsgeheimnisse hochladen</div>
+        <div class="tag on" onclick="tog(this)">KI-Output ungeprüft versenden</div>
+        <div class="tag on" onclick="tog(this)">Zugangsdaten & Passwörter eingeben</div>
+        <div class="tag" onclick="tog(this)">Mitarbeiterdaten verarbeiten</div>
+        <div class="tag" onclick="tog(this)">Nicht freigegebene Tools nutzen</div>
+        <div class="tag" onclick="tog(this)">Deepfakes oder täuschende Medien erstellen</div>
+        <div class="tag" onclick="tog(this)">KI als alleinige Entscheidungsgrundlage</div>
+        <div class="tag" onclick="tog(this)">Vollautomatische Kundenkommunikation</div>
+        <div class="tag" onclick="tog(this)">Private Nutzung auf Firmengeräten</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="field">
+      <label>Besondere Schwerpunkte (werden als eigene Unterabschnitte ausgebaut)</label>
+      <div class="checks2">
+        <label><input type="checkbox" id="s1" checked> Datenschutz & DSGVO (AV-Verträge)</label>
+        <label><input type="checkbox" id="s2" checked> Qualitätssicherung & Faktenprüfung</label>
+        <label><input type="checkbox" id="s3"> Kundentransparenz & Kennzeichnung</label>
+        <label><input type="checkbox" id="s4"> Urheberrecht & Nutzungsrechte</label>
+        <label><input type="checkbox" id="s5"> IT-Sicherheit & Zugangsverwaltung</label>
+        <label><input type="checkbox" id="s6" checked> Schulungspflicht (EU AI Act Art. 4)</label>
+        <label><input type="checkbox" id="s7"> Freigabeprozesse & Genehmigungen</label>
+        <label><input type="checkbox" id="s8"> Fairness & Diskriminierungsfreiheit</label>
+        <label><input type="checkbox" id="s9"> KI-Chatbot im Kundenservice</label>
+        <label><input type="checkbox" id="s10"> Datenanalyse & Automatisierung</label>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 GOVERNANCE -->
+  <div class="card" style="--i:4">
+    <div class="card-head"><div class="step">4</div><div><h2>Governance & Rollen (Kap. 10–13)</h2><p>Wer ist verantwortlich — und wie wird kontrolliert?</p></div></div>
+    <div class="g3">
+      <div class="field">
+        <label>KI-Verantwortliche/r im Betrieb</label>
+        <select id="verantw">
+          <option value="gf">Geschäftsführung direkt</option>
+          <option value="it">IT-Leitung</option>
+          <option value="hr">HR / Personalleitung</option>
+          <option value="dsb">Datenschutzbeauftragte/r</option>
+          <option value="abtl">Abteilungsleiter je Bereich</option>
+          <option value="ki">Dedizierter KI-Beauftragter</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Revisionszyklus</label>
+        <select id="review">
+          <option value="jaehrlich">Jährlich (empfohlen)</option>
+          <option value="halbjahr">Halbjährlich</option>
+          <option value="aenderung">Bei wesentlichen Änderungen</option>
+          <option value="quartals">Quartalsweise</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Verstöße werden gemeldet an</label>
+        <select id="meldung">
+          <option value="gf">Geschäftsführung</option>
+          <option value="ki">KI-Verantwortliche/r</option>
+          <option value="dsb">Datenschutzbeauftragte/r</option>
+          <option value="hr">HR / Personalleitung</option>
+        </select>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="field">
+      <label>Schulungsformat für Mitarbeitende (Kapitel 11)</label>
+      <div class="tag-wrap" id="schulungTags">
+        <div class="tag" onclick="tog(this)">Einweisung beim Onboarding</div>
+        <div class="tag" onclick="tog(this)">Team-Meeting / Kick-off</div>
+        <div class="tag" onclick="tog(this)">Schriftliche Einlesung + Unterschrift</div>
+        <div class="tag" onclick="tog(this)">Interner Workshop</div>
+        <div class="tag" onclick="tog(this)">E-Learning / Online-Kurs</div>
+        <div class="tag" onclick="tog(this)">Jährliche Auffrischungsschulung</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5 EXTRAS -->
+  <div class="card" style="--i:5">
+    <div class="card-head"><div class="step">5</div><div><h2>Ergänzungen & Sonstiges</h2><p>Optional — für branchenspezifische Besonderheiten</p></div></div>
+    <div class="g2">
+      <div class="field">
+        <label>Besonderheiten Ihres Betriebs</label>
+        <textarea id="extra" placeholder="z. B. Saisonbetrieb mit Aushilfskräften … KI nur in Büro-Abteilungen … Internationale Gäste / Kunden …"></textarea>
+      </div>
+      <div class="field">
+        <label>Zusätzliche Verbote oder Hinweise</label>
+        <textarea id="extra2" placeholder="z. B. Nur DSGVO-konforme EU-Server … Kein KI-Einsatz bei Allergen-Angaben … Freigabe durch Markenrecht nötig …"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <div class="gen-wrap">
+    <button class="gen-btn" id="genBtn" onclick="generate()">
+      <svg width="15" height="15" viewBox="0 0 18 18" fill="none"><path d="M9 2L11 7H16L12 10.5L13.5 16L9 13L4.5 16L6 10.5L2 7H7L9 2Z" fill="white"/></svg>
+      KI-Kodex erstellen
+    </button>
+    <div class="gen-hint">Dauert ca. 1 Sekunde · Alle Daten bleiben lokal · Keine Registrierung</div>
+  </div>
+
+  <div class="prog-wrap" id="progWrap">
+    <div class="prog-lbl" id="progLbl">Kapitel werden zusammengestellt …</div>
+    <div class="prog-track"><div class="prog-bar"></div></div>
+  </div>
+
+  <div class="out-wrap" id="outWrap">
+    <div class="out-bar">
+      <div><h3>Ihr KI-Verhaltenskodex · 13 Kapitel + Checkliste</h3><p>Platzhalter in [ECKIGEN KLAMMERN] durch Ihre echten Angaben ersetzen · Version 1.0</p></div>
+      <div class="btns">
+        <button class="btn-ol" id="copyBtn" onclick="doCopy()">📋 Kopieren</button>
+        <button class="btn-pdf" id="pdfBtn" onclick="doPDF()">⬇ PDF herunterladen</button>
+      </div>
+    </div>
+    <div class="out-body"><div id="out"></div></div>
+  </div>
+
+</main>
+
+<footer>
+  <div style="margin-bottom:12px">
+    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="height:32px;opacity:.7;margin-bottom:10px">
+  </div>
+  <strong>KI-Kodex Generator</strong> · Ein Angebot des MakerPort Stralsund · Kein Server, keine Datenspeicherung<br>
+  <span style="margin-top:4px;display:block;margin-bottom:14px">Kein Ersatz für Rechtsberatung. Rechtliche Grundlagen: EU AI Act (VO 2024/1689 Art. 4), DSGVO, BDSG | Stand Mai 2026</span>
+  <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:6px">
+    <a href="#" onclick="openModal('datenschutz');return false;" style="color:rgba(255,255,255,.55);text-decoration:none;font-size:12px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:1px">Datenschutz</a>
+    <a href="#" onclick="openModal('impressum');return false;" style="color:rgba(255,255,255,.55);text-decoration:none;font-size:12px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:1px">Impressum</a>
+    <a href="#" onclick="openModal('agb');return false;" style="color:rgba(255,255,255,.55);text-decoration:none;font-size:12px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:1px">AGB & Nutzungsbedingungen</a>
+  </div>
+  <div style="margin-top:12px;font-size:11px">© 2026 MakerPort Stralsund — Stralsunder Innovations- und Gründerzentrum GmbH</div>
+</footer>
+
+<!-- MODAL OVERLAY -->
+<div id="modal-overlay" onclick="closeModal()" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:500;align-items:center;justify-content:center;padding:1rem">
+  <div id="modal-box" onclick="event.stopPropagation()" style="background:#fff;border-radius:16px;max-width:680px;width:100%;max-height:88vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.22)">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid #E0E4EA;position:sticky;top:0;background:#fff;z-index:1;border-radius:16px 16px 0 0">
+      <span id="modal-title" style="font-family:'Google Sans',sans-serif;font-size:16px;font-weight:600;color:#2D3E50"></span>
+      <button onclick="closeModal()" style="background:none;border:none;cursor:pointer;font-size:20px;color:#8A9BB0;line-height:1;padding:2px 6px">×</button>
+    </div>
+    <div id="modal-content" style="padding:24px;font-family:'Roboto',sans-serif;font-size:13.5px;line-height:1.8;color:#1C2D3D"></div>
+  </div>
+</div>
+
+<script>
+var KODEX = '';
+
+function tog(el){ el.classList.toggle('on'); }
+function selRad(el){ document.querySelectorAll('#tonGroup .rc').forEach(r=>r.classList.remove('on')); el.classList.add('on'); }
+function gtags(id){ return [...document.querySelectorAll('#'+id+' .tag.on')].map(t=>t.textContent.trim()); }
+function gcheck(id){ return document.getElementById(id)?.checked; }
+
+// ── BRANCHENDATEN ──────────────────────────────────────────
+const BD = {
+  'Hotel / Unterkunft':{
+    erlaubt:[
+      'Vorformulieren von Gästeanfragen, Willkommensschreiben und Zimmerinfos — mit anschließender persönlicher Anpassung',
+      'Erstellen von Übersetzungen für Gästekommunikation, Speisekarten und Infomaterial',
+      'Vorbereitung von Antworten auf Online-Bewertungen (Google, Booking.com, TripAdvisor) — individuell anpassen, niemals 1:1 übernehmen',
+      'Ausarbeitung von Gruppenangeboten, Eventplanung und Angebotspräsentationen',
+      'Erstellung von Social-Media-Inhalten und saisonalen Marketingmaterialien',
+      'Strukturierung interner Berichte, Übergabeprotokolle und Einarbeitungsunterlagen',
+      'Recherche zu lokalen Ausflugstipps, Veranstaltungen und Gästeempfehlungen'
+    ],
+    verboten_branch:[
+      'Eingabe von Gästenamen, Buchungsdaten, Zimmernummern oder Zahlungsinformationen in öffentliche KI-Dienste',
+      'Verarbeitung von Reisepässen, Ausweiskopien oder sonstigen Identifikationsdokumenten per KI',
+      'Bearbeitung von Personaldaten, Dienstplänen mit Mitarbeiternamen oder internen Gehaltsdaten',
+      'Vollautomatische Abwicklung von Gästebeschwerden ohne menschliche Prüfung und Freigabe',
+      'Eingabe interner Preisstrategien, Rabattstrukturen oder Lieferantenkonditionen in externe Systeme'
+    ],
+    datenbsp:['Namen und Kontaktdaten von Gästen (DSGVO-Betroffene)','Buchungsnummern, An-/Abreisedaten, Zimmerbelegungen','Kreditkarten- und Zahlungsdaten (PCI-DSS-relevant)','Ausweiskopien und Reisepassdaten','Interne Preislisten und Sonderkonditionen','Personalstammdaten und Dienstpläne mit Personenbezug'],
+    hinweis:'Im Gastgewerbe verarbeiten wir täglich personenbezogene Daten von Gästen. Der EU AI Act klassifiziert KI-Systeme, die solche Daten verarbeiten, als potenziell risikoreich. Besondere Sorgfalt ist daher Pflicht.'
+  },
+  'Restaurant / Gastronomie':{
+    erlaubt:[
+      'Attraktivere Formulierung von Speisekartentexten, Tagesgerichten und Saisonangeboten',
+      'Vorformulieren von Antworten auf Gästebewertungen — individuell anpassen, Ton prüfen',
+      'Erstellung von Marketingtexten, Newsletter-Inhalten und Social-Media-Beiträgen',
+      'Übersetzungen der Speisekarte und von Aushängen für internationale Gäste',
+      'Effizienzsteigerung bei Dienstplänen, Bestelllisten und internen Checklisten',
+      'Ideenfindung für Menükombinationen, Rezeptinspirationen und saisonale Konzepte',
+      'Formulierung von Schulungsunterlagen, Hygieneanweisungen und Onboarding-Dokumenten'
+    ],
+    verboten_branch:[
+      'Eingabe von Gästedaten, Reservierungen mit vollständigen Namen in öffentliche KI-Systeme',
+      'Verarbeitung von Allergie- und Unverträglichkeitsinformationen von Gästen in externe KI',
+      'Eingabe interner Kalkulationspreise, Einkaufspreise und Lieferantenkonditionen',
+      'Verwendung vertraulicher Hausrezepturen als KI-Prompt',
+      'Veröffentlichung KI-generierter Allergeninformationen ohne qualifizierte fachkundige Prüfung'
+    ],
+    datenbsp:['Gästenamen und Reservierungsdaten','Allergie- und Unverträglichkeitsinfos (Art. 9 DSGVO: besondere Kategorie)','Mitarbeiterdaten und Gehaltsabrechnungen','Interne Einkaufspreise und Lieferantenverträge','Vertrauliche Rezepturen (Geschäftsgeheimnis)'],
+    hinweis:'Achtung: Fehlerhafte KI-Angaben zu Allergenen können die Gesundheit von Gästen gefährden. KI-generierte Allergeninformationen sind ausnahmslos durch Fachpersonal zu prüfen und freizugeben.'
+  },
+  'Spedition / Logistik':{
+    erlaubt:[
+      'Erstellung von Lieferscheinen, Frachtdokumenten und Kundenanschreiben mit KI-Unterstützung',
+      'Professionellere Formulierung von Kundenkommunikation zu Sendungsstatus und Reklamationen',
+      'Schnellere und präzisere Ausarbeitung von Angeboten und Frachtratenanfragen',
+      'Zusammenfassung und Aufbereitung interner Reports und Managementberichte',
+      'Übersetzungen für internationale Aufträge und Kundenkommunikation',
+      'Formulierung von Fahrerbriefings, Sicherheitsunterweisungen und Betriebsanweisungen',
+      'Unterstützung bei Routenoptimierungen und Tourenplanung mit zugelassenen Systemen'
+    ],
+    verboten_branch:[
+      'Eingabe von Kundennamen, Lieferadressen und Empfängerdaten in öffentliche KI-Systeme',
+      'Verarbeitung sensibler Fracht- und Ladedetails mit Warenangaben und Wertdeklarationen',
+      'Bearbeitung von Fahrerdaten, Führerscheinnummern und persönlichen Mitarbeiterdaten',
+      'Weitergabe von Vertragspreisen, Sonderkonditionen und Kundenrabatten',
+      'Hochladen von Zolldokumenten mit vollständigen Unternehmens- oder Personendaten'
+    ],
+    datenbsp:['Kundennamen, Lieferadressen, Empfängerinformationen','Fracht- und Sendungsdetails mit Warenwert','Fahrerdaten und Führerscheininfos (Beschäftigtendaten)','Vertragspreise und Kundenkonditionen','Zoll- und Exportdokumente mit Firmendaten'],
+    hinweis:'Logistikunternehmen verarbeiten im Auftrag ihrer Kunden oft deren Kundendaten (Empfänger). Das begründet eine Auftragsverarbeitungsbeziehung nach Art. 28 DSGVO — auch beim KI-Einsatz zu berücksichtigen.'
+  },
+  'Getränkehersteller':{
+    erlaubt:[
+      'Attraktivere Formulierung von Produktbeschreibungen, Etikettentexten und Verkaufsunterlagen',
+      'Entwicklung von Marketingkampagnen, Anzeigentexten und Social-Media-Inhalten',
+      'Effizientere Marktanalyse und Trendrecherche für Produktentwicklung und Vertrieb',
+      'Professionellere Erstellung von Händlerangeboten und Vertriebspräsentationen',
+      'Übersetzungen für Exportmärkte, Etiketten und internationale Produktinfos',
+      'Bessere Strukturierung von Qualitätshandbüchern, Schulungsunterlagen und Prozessdokumentationen'
+    ],
+    verboten_branch:[
+      'Eingabe vertraulicher Rezepturen, Herstellungsgeheimnisse oder Geschmacksformulierungen in externe KI',
+      'Verarbeitung von Kundendaten der Händler, Distributoren oder Gastronomiekunden',
+      'Teilen von Einkaufspreisen, Lieferantenkonditionen und Kalkulationsgrundlagen',
+      'Eingabe von Produktionsdaten, Chargennummern und internen Qualitätskennzahlen',
+      'Hochladen von Zertifizierungsdokumenten, Prüfberichten oder behördlichen Zulassungen'
+    ],
+    datenbsp:['Rezepturen und Herstellungsgeheimnisse (Geschäftsgeheimnis)','Kundendaten von Händlern und Vertriebspartnern','Einkaufspreise und Lieferantenkonditionen','Chargen- und Qualitätsprüfdaten','Behördliche Zertifikate und Prüfdokumente'],
+    hinweis:'Rezepturen und Herstellungsverfahren sind das Kernkapital von Getränkeherstellern. Die Eingabe solcher Informationen in öffentliche KI-Systeme kann diese dauerhaft für Dritte zugänglich machen — selbst wenn der Anbieter Vertraulichkeit zusichert.'
+  },
+  'Handwerksbetrieb':{
+    erlaubt:[
+      'Schnellere und professionellere Erstellung von Angeboten, Auftragsbestätigungen und Rechnungen',
+      'KI-unterstützte Formulierung von Kundenkommunikation, Terminerinnerungen und Projektupdates',
+      'Bessere Strukturierung technischer Beschreibungen, Leistungsverzeichnisse und Dokumentationen',
+      'Entwicklung von Werbetexten für Website, Flyer und Social Media',
+      'Klarere Formulierung von Arbeitsanweisungen, Sicherheitsunterweisungen und Einarbeitungsunterlagen',
+      'Effizientere Recherche zu Materialpreisen, DIN-Normen und technischen Vorschriften'
+    ],
+    verboten_branch:[
+      'Eingabe von Kundendaten, Privatadressen und Kontaktinformationen in öffentliche KI',
+      'Verarbeitung von Angebots- und Kalkulationsdaten mit Preisen und Margen',
+      'Hochladen von Bauplänen, technischen Zeichnungen oder vertraulichen Projektunterlagen',
+      'Bearbeitung von Mitarbeiterdaten, Stundenaufzeichnungen oder Lohninfos',
+      'Verwendung KI-generierter technischer Normeninformationen ohne qualifizierte Prüfung'
+    ],
+    datenbsp:['Kundennamen, Privatadressen und Kontaktdaten','Kalkulationen und Angebotsdaten mit Preisen','Mitarbeiterdaten und Stundenaufzeichnungen','Baupläne und technische Projektunterlagen','Bankverbindungen und Zahlungsinformationen'],
+    hinweis:'Im Handwerk basiert das Kundenvertrauen auf persönlicher Beziehung und Diskretion. Kundendaten — auch vermeintlich harmlose wie Namen und Adressen — unterliegen der DSGVO und dürfen nicht in externe KI-Dienste ohne AV-Vertrag eingegeben werden.'
+  },
+  default:{
+    erlaubt:[
+      'Texte, E-Mails und Dokumente mit KI-Unterstützung schneller und professioneller erstellen',
+      'Allgemeine Recherchen, Marktinformationen und Branchentrends effizienter aufbereiten',
+      'Routineaufgaben wie Textzusammenfassungen, Übersetzungen und Strukturierungen durch KI beschleunigen',
+      'Kreative Aufgaben wie Brainstorming, Ideenfindung und Konzepterstellung mit KI-Impulsen bereichern',
+      'Interne Schulungsunterlagen, Präsentationen und Berichte besser strukturieren',
+      'Kundenkommunikation und Marketing mit KI-Textentwürfen effizienter gestalten — immer mit menschlicher Freigabe',
+      'Codegenerierung und technische Dokumentation mit KI-Unterstützung beschleunigen'
+    ],
+    verboten_branch:[
+      'Eingabe personenbezogener Kundendaten (Namen, Adressen, Kontaktinfos) in öffentliche KI-Systeme',
+      'Weitergabe vertraulicher Vertrags-, Preis- oder Strategiedaten',
+      'Bearbeitung von Personaldaten, Gehaltsinformationen oder Personalakten',
+      'Ungeprüfte Weiterleitung von KI-generierten Inhalten an Kunden oder Geschäftspartner',
+      'Verwendung von Zugangsdaten oder Passwörtern als Teil eines KI-Prompts'
+    ],
+    datenbsp:['Kundennamen, Adressen und Kontaktdaten','Vertrags- und Preiskonditionen','Mitarbeiterdaten und Personalunterlagen','Zugangsdaten und Passwörter','Interne Finanz- und Strategiedokumente'],
+    hinweis:'Jede Information, die in ein KI-System eingegeben wird, verlässt potenziell den Einflussbereich des Unternehmens. Datensparsamkeit ist daher das oberste Prinzip beim KI-Einsatz.'
+  }
+};
+
+// ── BRANCHE MATCHING (FIXED: vollständiges Matching aller Optionen) ─────────
+function getBD(b){
+  if(!b || b==='') return BD.default;
+  // Direkter Match
+  if(BD[b]) return BD[b];
+  // Partielles Match (z.B. "Hotel / Unterkunft" → startsWith "Hotel")
+  for(const k of Object.keys(BD)){
+    if(k==='default') continue;
+    if(b===k) return BD[k];
+    const bNorm = b.toLowerCase();
+    const kNorm = k.toLowerCase();
+    if(bNorm.includes(kNorm.split('/')[0].trim()) || kNorm.includes(bNorm.split('/')[0].trim())) return BD[k];
+  }
+  return BD.default;
+}
+
+// ── HAUPTGENERATOR (FIXED: alle Bugs behoben) ────────────────────────────
+function generate(){
+  const firmenname = document.getElementById('firmenname').value.trim();
+  // FIX: Leerstring statt Platzhalter → im PDF als leere Linie
+  const B = firmenname || '';
+  const BDisplay = B || '[BETRIEBSNAME]';
+  const ph_ansp = document.getElementById('ph_ansprechperson').value.trim();
+  const ph_email = document.getElementById('ph_email').value.trim();
+  const ph_datum = document.getElementById('ph_datum').value.trim();
+  const ph_gf = document.getElementById('ph_gf').value.trim();
+  const ph_revision = document.getElementById('ph_revision').value.trim();
+  const branche = document.getElementById('branche').value || '';
+  const brancheDisplay = branche || 'Ihr Betrieb';
+  const groesse = document.getElementById('groesse').value;
+  const groesseLabel = {mini:'1–9 Mitarbeitende',klein:'10–49 Mitarbeitende',mittel:'50–249 Mitarbeitende',gross:'250+ Mitarbeitende'}[groesse]||'';
+  const erfahrung = document.getElementById('erfahrung').value;
+  // FIX: erfahrung wird jetzt im Kodex verwendet
+  const erfahrungText = {wenig:'Die meisten Mitarbeitenden stehen am Anfang — Schulungen haben daher hohe Priorität.',mittel:'Ein Teil des Teams nutzt KI bereits aktiv; gezielte Vertiefungsschulungen sind empfohlen.',viel:'KI ist bereits Teil des Alltags; regelmäßige Updates zu neuen Tools und Regularien sind essenziell.'}[erfahrung]||'';
+  const ton = document.querySelector('input[name=ton]:checked')?.value||'locker';
+  const du = ton==='locker';
+
+  const tools = gtags('toolTags').filter(t=>t!=='Noch nicht festgelegt');
+  const zwecke = gtags('zweckTags');
+  const verbote = gtags('verbotTags');
+  const schulung = gtags('schulungTags');
+  const extra = document.getElementById('extra').value.trim();
+  const extra2 = document.getElementById('extra2').value.trim();
+  const review = document.getElementById('review').value;
+  const reviewLabel = {jaehrlich:'Jährlich',halbjahr:'Halbjährlich',aenderung:'Bei wesentlichen Änderungen',quartals:'Quartalsweise'}[review]||'Jährlich';
+  const verantw = document.getElementById('verantw').value;
+  const verantwLabel = {gf:'Geschäftsführung',it:'IT-Leitung / IT-Verantwortliche/r',hr:'HR / Personalleitung',dsb:'Datenschutzbeauftragte/r',abtl:'Abteilungsleitung',ki:'KI-Beauftragte/r'}[verantw]||'[ZUSTÄNDIGE FUNKTION]';
+  const meldung = document.getElementById('meldung').value;
+  const meldungLabel = {gf:'Geschäftsführung',ki:'KI-Verantwortliche/r',dsb:'Datenschutzbeauftragte/r',hr:'HR / Personalleitung'}[meldung]||'[ANSPRECHPARTNER]';
+
+  const bd = getBD(branche);
+
+  // Verbote zusammenführen
+  let verboteListe = [...bd.verboten_branch];
+  verbote.forEach(v=>{
+    if(!verboteListe.some(x=>x.toLowerCase().includes(v.toLowerCase().slice(0,14)))) verboteListe.unshift(v);
+  });
+  if(extra2) verboteListe.push(extra2);
+  verboteListe = verboteListe.slice(0,9);
+
+  // FIX: Tool-Liste mit korrektem Zweck-Mapping
+  // Zwecke werden gleichmäßig auf Tools verteilt, nicht per Index
+  const toolListe = tools.length>0
+    ? tools.map((t,i)=>{
+        const zweck = zwecke.length>0 ? zwecke[i % zwecke.length] : '';
+        return `   ${i+1}. ${t} – Zweck: ${zweck||'[bitte ergänzen]'}`;
+      }).join('\n')
+    : `   1. [Tool 1] – Zweck: [bitte ergänzen]\n   2. [Tool 2] – Zweck: [bitte ergänzen]\n   3. [Tool 3] – Zweck: [bitte ergänzen]`;
+
+  // Schulungsplan
+  const schulungText = schulung.length>0
+    ? schulung.join(', ')
+    : 'Wird durch [KI-VERANTWORTLICHE/R] festgelegt';
+
+  // FIX: Hilfsfunktion für Platzhalterfelder — leeres Feld → Leerzeichen für Unterschriftslinie im PDF
+  const ph = (val, fallback) => val || fallback || '';
+
+  // Optionale Sektionen
+  let optSektionen = '';
+
+  if(gcheck('s9')){ // Chatbot
+    optSektionen += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 09 · KUNDENSERVICE & KI-CHATBOTS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Beim KI-Einsatz im direkten Kundenkontakt gelten besondere Anforderungen:
+
+✔  Transparenzpflicht: Kunden müssen jederzeit erkennen können, ob sie mit einer KI oder einem Menschen kommunizieren. Eine Kennzeichnung wie „Dieser Chat wird durch KI unterstützt" ist Pflicht.
+✔  Eskalationsmöglichkeit: Kunden müssen jederzeit zu einem menschlichen Mitarbeitenden wechseln können — auf Wunsch sofort, ohne Begründung.
+✔  Datenschutz: Chatbots dürfen keine besonderen Datenkategorien nach Art. 9 DSGVO erheben (z. B. Gesundheitsdaten, religiöse Überzeugungen).
+✔  Protokollierung: Gesprächsdaten werden nur mit Rechtsgrundlage gespeichert und nach definierten Fristen gelöscht.
+✘  Vollautomatische verbindliche Aussagen, Vertragsabschlüsse oder Reklamationsentscheidungen ohne menschliche Freigabe sind nicht zulässig.
+✔  Qualitätssicherung: Chatbot-Antworten werden regelmäßig auf Richtigkeit und Angemessenheit durch [KI-VERANTWORTLICHE/R] geprüft.`;
+  }
+
+  if(gcheck('s10')){ // Datenanalyse
+    optSektionen += `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 08 · DATENANALYSE & AUTOMATISIERUNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Datenanalyse mit KI:
+✔  Datensätze mit personenbezogenen Informationen werden vor KI-Nutzung anonymisiert oder pseudonymisiert.
+✔  Analyseergebnisse werden von Fachpersonen interpretiert und validiert — KI liefert Hypothesen, keine Entscheidungen.
+✔  Externe KI-Analysetools erfordern eine Risikoprüfung durch IT und Datenschutz vor der Einführung.
+✘  Repräsentativität der Daten muss sichergestellt sein — systematische Verzerrungen (Bias) sind aktiv zu prüfen.
+
+Prozessautomatisierung:
+✔  Automatisierte Prozesse werden dokumentiert und regelmäßig auf korrekte Funktion überprüft.
+✔  Ein manueller Eingriff (Notfall-Override) muss jederzeit möglich sein.
+✘  Automatisierte Entscheidungen mit rechtlicher Wirkung auf Personen erfordern menschliche Überprüfung (Art. 22 DSGVO).
+✔  Änderungen an automatisierten Prozessen werden im Change-Management dokumentiert.`;
+  }
+
+  // FIX: Kapitel-Nummern im Inhaltsverzeichnis in richtiger Reihenfolge (08 vor 09)
+  const tocOptional = (gcheck('s10') ? '\n  08  Datenanalyse & Automatisierung' : '') + (gcheck('s9') ? '\n  09  Kundenservice & KI-Chatbots' : '');
+
+  // ── KODEX ZUSAMMENBAUEN ─────────────────────────────────
+  const K = `INTERNER KI-KODEX
+${BDisplay}
+WHITEPAPER · GOVERNANCE | Vertraulich – nur interner Gebrauch
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Erstellt von:         ${ph(ph_ansp,'[KI-ANSPRECHPERSON NAME]')}
+Gültig ab:            ${ph(ph_datum,'[DATUM]')}
+Nächste Revision:     ${ph(ph_revision,'[DATUM + Revisionszyklus]')}
+Genehmigt durch:      ${ph(ph_gf,'[NAME GESCHÄFTSFÜHRUNG]')}
+Version:              1.0
+Klassifizierung:      Intern – Vertraulich
+
+Schwerpunkte dieses Dokuments:
+  – Verbindliche Regeln für alle KI-Werkzeuge in ${BDisplay}
+  – Datenschutz & DSGVO-Konformität von Anfang an mitgedacht
+  – Klare Verantwortlichkeiten auch für kleine Teams
+  – Praxisnahe Verbote, Checklisten und Sofortmaßnahmen
+  – Kompatibel mit dem EU AI Act (Anwendung ab 2024–2027 gestaffelt)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+INHALTSVERZEICHNIS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  01  Präambel & Zweck
+  02  Geltungsbereich
+  03  Acht Grundprinzipien des KI-Einsatzes
+  04  Erlaubte und verbotene KI-Anwendungen
+  05  Datenschutz & DSGVO-Konformität
+  06  Textgenerierung & generative KI
+  07  Bild- und Mediengenerierung
+  07a Urheberrecht & Kundenverträge
+  07b Tool-Ampel — Dynamische Freigabeliste
+  07c Fast-Track Prozess für neue Tools
+  07d Menschliche Kontrolle — Human-in-the-Loop${tocOptional}
+  10  Rollen und Verantwortlichkeiten
+  11  Schulung und Sensibilisierung
+  12  Verstöße und Konsequenzen
+  13  Inkrafttreten & Revisionsplan
+  A   Glossar & Tages-Checkliste
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 01 · PRÄAMBEL & ZWECK
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Künstliche Intelligenz bietet auch für ${brancheDisplay}-Betriebe wie ${BDisplay} erhebliche Chancen: effizientere Abläufe, bessere Kommunikation, kreativere Ergebnisse. Zugleich stellt ihr Einsatz neue Anforderungen an Datenschutz, Transparenz und ethisches Handeln.
+
+Mit diesem Kodex bekennt sich ${BDisplay} zu einem verantwortungsvollen, rechtssicheren und menschenzentrierten Umgang mit KI-Technologien. Er ist kein Innovationshemmnis, sondern eine Grundlage für Vertrauen — gegenüber Kunden, Mitarbeitenden und Geschäftspartnern.${extra ? '\n\n'+extra : ''}${bd.hinweis ? '\n\nBranchenhinweis: '+bd.hinweis : ''}
+
+KI-Erfahrung im Team: ${erfahrungText}
+
+Ziele dieses Kodex:
+  – Einheitliche und rechtssichere Nutzung von KI-Werkzeugen sicherstellen
+  – Datenschutz und Persönlichkeitsrechte schützen (DSGVO-Konformität)
+  – Transparenz gegenüber Kunden und Mitarbeitenden gewährleisten
+  – Haftungsrisiken durch klare Verantwortlichkeiten minimieren
+  – Innovationspotenziale verantwortungsvoll erschließen
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 02 · GELTUNGSBEREICH
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dieser Kodex gilt für alle Personen, die im Namen oder im Auftrag von ${BDisplay} tätig sind und dabei KI-Werkzeuge einsetzen — unabhängig von Vertragsform oder Senioritätsstufe:
+
+  – Alle Mitarbeitenden (Vollzeit, Teilzeit, Minijob, Saisonkräfte)
+  – Führungskräfte und Geschäftsleitung
+  – Freie Mitarbeitende, Praktikantinnen und Praktikanten
+  – Externe Dienstleister und Berater mit Zugang zu Unternehmensressourcen
+
+Er gilt für alle KI-Werkzeuge, die beruflich oder auf Unternehmensgeräten eingesetzt werden — einschließlich privat beschaffter Tools, die für Aufgaben von ${BDisplay} verwendet werden.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 03 · ACHT GRUNDPRINZIPIEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Diese acht Prinzipien sind verbindlich — ohne Ausnahme.
+
+1. Transparenz — KI-generierte Inhalte, die extern kommuniziert werden, sind als solche zu kennzeichnen.
+2. Menschliche Kontrolle — KI unterstützt, ersetzt aber nicht. Das letzte Wort hat immer der Mensch.
+3. Datensparsamkeit — Es werden nur die unbedingt erforderlichen Daten an KI-Systeme übermittelt.
+4. Zweckbindung — KI-Tools dürfen ausschließlich für betriebliche Zwecke eingesetzt werden.
+5. Fairness — KI-Ergebnisse, besonders bei Personalentscheidungen, sind kritisch zu hinterfragen.
+6. Qualitätssicherung — Alle KI-Outputs werden vor Verwendung auf Richtigkeit geprüft.
+7. Vertraulichkeit — Interne und personenbezogene Daten gehören nicht in externe KI-Systeme.
+8. Rechtssicherheit — Urheberrecht, DSGVO und sonstige Anforderungen sind stets zu beachten.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 04 · ERLAUBTE UND VERBOTENE ANWENDUNGEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+✔  ERLAUBT — mit Qualitätsprüfung:
+
+${bd.erlaubt.map(e=>`✔  ${e}`).join('\n')}
+
+Alle erlaubten Anwendungen unterliegen den Grundprinzipien aus Kapitel 3.
+
+✘  VERBOTEN — ohne Ausnahme:
+
+${verboteListe.map(v=>`✘  ${v}`).join('\n')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 05 · DATENSCHUTZ & DSGVO-KONFORMITÄT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Der Einsatz von KI-Systemen unterliegt vollumfänglich der DSGVO, dem BDSG und dem EU AI Act (gestaffelte Anwendung 2024–2027).
+
+Grundlegende Datenschutzpflichten:
+  – Vor Nutzung eines neuen KI-Dienstes: AV-Vertrag nach Art. 28 DSGVO prüfen und abschließen
+  – Rechtsgrundlage nach Art. 6 DSGVO für jede Datenverarbeitung sicherstellen
+  – Kunden über KI-Einsatz in der Datenschutzerklärung informieren
+  – Bei hohem Risiko: Datenschutz-Folgenabschätzung (DSFA) nach Art. 35 DSGVO durchführen
+  – Drittlandübermittlungen (z. B. US-Anbieter) nur mit geeigneten Garantien (EU-Standardvertragsklauseln)
+
+Folgende Daten dürfen NIEMALS in externe KI-Systeme eingegeben werden:
+${bd.datenbsp.map(d=>`  ⚠  ${d}`).join('\n')}
+  ⚠  Passwörter, PINs, API-Keys oder sonstige Zugangsdaten
+  ⚠  Inhalte aus vertraulicher interner Korrespondenz oder rechtlicher Beratung
+
+Faustregel: Wenn diese Information nicht auf unserer Website stehen würde — gehört sie nicht in eine KI.
+
+EU AI Act — aktueller Stand (Stand 2025):
+  – In Kraft seit August 2024; Verbote für unakzeptables Risiko gelten seit Februar 2025.
+  – Schulungspflicht nach Art. 4 gilt seit dem 2. Februar 2025 für alle KI-nutzenden Unternehmen.
+  – Als Betreiber (Deployer) bestehender KI-Tools fällt ${BDisplay} unter die Pflichten des AI Act.
+  – Die gängig genutzten Tools (ChatGPT, Copilot etc.) fallen meist in „minimales" oder „begrenztes" Risiko.
+  – Transparenzpflicht gilt: Extern kommunizierte KI-Inhalte müssen erkennbar sein.
+  – Ab August 2026 greifen neue Pflichten für Hochrisiko-Anwendungen — wir beobachten die Entwicklungen.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 06 · TEXTGENERIERUNG & GENERATIVE KI
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Generative KI-Werkzeuge können die Effizienz erheblich steigern. Ihr Einsatz erfordert besondere Sorgfalt.
+
+✔  Kennzeichnung: KI-generierte Texte, die extern kommuniziert werden, als solche kenntlich machen — wo es für den Empfänger relevant ist.
+✔  Faktenprüfung: KI-Systeme können „halluzinieren" — plausibel klingende, aber falsche Informationen erzeugen. Alle sachlichen Aussagen sind zu verifizieren.
+✔  Qualitätskontrolle: Jeden KI-generierten Text vor Verwendung prüfen, anpassen und inhaltlich freigeben.
+✘  Keine Geheimnisse: Vertrauliche Informationen, Kundendaten oder interne Unterlagen nicht als Prompt eingeben.
+✔  Verantwortung: Wer KI-Output verwendet, trägt die vollständige inhaltliche Verantwortung — gegenüber Kunden, Behörden und Dritten.
+
+Freigegebene Werkzeuge für ${BDisplay}:
+${toolListe}
+  → Neue Werkzeuge sind vor der Nutzung durch [KI-VERANTWORTLICHE/R] freizugeben.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 07 · BILD- UND MEDIENGENERIERUNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+KI-Bildgenerierung (Midjourney, DALL·E, Stable Diffusion u. a.) bietet kreative Möglichkeiten, birgt aber spezifische Risiken:
+
+✔  Kennzeichnung: KI-generierte Bilder in externer Kommunikation und Werbematerial als solche kennzeichnen.
+✘  Persönlichkeitsrechte: Keine realistischen Abbilder realer Personen ohne deren ausdrückliche Einwilligung.
+✘  Deepfakes verboten: Täuschend echte oder manipulierte Darstellungen realer Personen sind ausnahmslos untersagt — auch zu internen Zwecken.
+✔  Urheberrecht: Gewerbliche Nutzung nur mit entsprechendem Lizenzplan des Anbieters; Drittrechte prüfen.
+✘  Keine geschützten Inhalte: Logos, Produktentwürfe, geschützte Designs oder Markenmaterialien Dritter nicht hochladen.
+✔  Freigabe: Externe Bildmaterialien, die für Werbung oder Kundenkommunikation eingesetzt werden, benötigen Freigabe durch [MARKETING / GESCHÄFTSFÜHRUNG].
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 07a · URHEBERRECHT & KUNDENVERTRÄGE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Rein KI-generierte Werke sind in Deutschland urheberrechtlich nicht schutzfähig. Das hat direkte Konsequenzen für Kundenaufträge.
+
+✔  Kunden proaktiv informieren, wenn Ergebnisse vollständig KI-generiert sind und damit kein Urheberrechtsschutz besteht — schriftlich in Auftragsbestätigung oder Rechnung.
+✔  Substanzielle menschliche Überarbeitung (Overpainting, redaktionelle Bearbeitung) kann Urheberrechtsschutz für das Endergebnis begründen — gilt als Faustregel: wenn die menschliche Eigenleistung das KI-Ergebnis wesentlich prägt.
+✘  Minimale Korrekturen (Tippfehler, Farbwerte) begründen keinen Schutz.
+  – Bei Unklarheiten zur Rechtelage: Rechtsberatung einholen.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 07b · TOOL-AMPEL — DYNAMISCHE FREIGABELISTE
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${BDisplay} führt eine dynamische Tool-Ampel. Pflege durch ${ph(ph_ansp,'[KI-ANSPRECHPERSON]')}, monatliche Aktualisierung. Aktuelle Liste: [LINK INTRANET / TOOL-LISTE — bitte ergänzen]
+
+GRÜN — Vollständig freigegeben: AV-Vertrag vorhanden, Nutzung für interne Zwecke und anonymisierte Daten erlaubt.
+GELB — Eingeschränkt: Nur für Brainstorming / Recherche / interne Entwürfe. Keine Kunden- oder Personendaten.
+ROT — Gesperrt: Keine DSGVO-Garantien, kein AV-Vertrag abschließbar, oder Tool trainiert mit Nutzerdaten.
+✘  Rot-gelistete Tools dürfen für betriebliche Zwecke nicht eingesetzt werden.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 07c · FAST-TRACK FÜR NEUE TOOLS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Statt "Schatten-KI" zu riskieren: neues Tool entdeckt? Einfach vorschlagen.
+
+  1. Anfrage an ${ph(ph_ansp,'[KI-ANSPRECHPERSON]')} (${ph(ph_email,'[E-MAIL]')}): Tool-Name, Anwendungsfall, bekannte Datenschutzinfos.
+  2. Ersteinschätzung innerhalb von 48 Stunden: Grün / Gelb / Rot.
+  3. Sandbox-Test mit Dummy-Daten möglich — keine echten Daten im Testbetrieb.
+  4. Freigabe oder Ablehnung durch ${ph(ph_ansp,'[KI-ANSPRECHPERSON]')} in Abstimmung mit IT und Datenschutz.${optSektionen}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 07d · MENSCHLICHE KONTROLLE — HUMAN-IN-THE-LOOP
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Vier-Augen-Prinzip (High-Stakes):
+✔  Pressemitteilungen, juristische Texte, Angebote und Whitepapers erfordern Gegenzeichnung durch eine zweite Person — dokumentiert mit Kürzel + Datum.
+✘  Alleinige Prüfung durch den Ersteller reicht bei High-Stakes-Inhalten nicht.
+
+Halluzinations-Check:
+✔  Sachliche Behauptungen, Zahlen und Gesetzesreferenzen aus KI-Outputs mit mindestens einer externen Quelle verifizieren und in der Arbeitsmappe vermerken.
+✘  Ungeprüfte KI-Fakten nicht in externe Kommunikation oder Kundendokumente übernehmen.
+
+Prompt-Dokumentation: Bei Kundenprojekten mit rechtlicher oder finanzieller Relevanz verwendete Prompts und KI-Version mit den Projektunterlagen speichern.
+
+Standard-Disclaimer je Kanal:
+  – Social Media: "Mit KI-Unterstützung erstellt und redaktionell geprüft."
+  – Whitepaper / Studien: "Teile wurden mit generativer KI erstellt. Alle Fakten durch ${BDisplay} verifiziert."
+  – Kundenangebote: Transparenzhinweis gem. Kap. 07a, sofern KI wesentlich beteiligt.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 10 · ROLLEN UND VERANTWORTLICHKEITEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Geschäftsführung:
+  – Genehmigung und Inkraftsetzung dieses KI-Kodex
+  – Bereitstellung von Ressourcen für Schulungen und KI-Governance
+  – Vorbildfunktion bei der regelkonformen KI-Nutzung
+  – Genehmigung von Standard-Disclaimern für externe Kommunikationskanäle (Kap. 07d)
+
+KI-Verantwortliche/r (${verantwLabel} — ${ph(ph_ansp,'[NAME]')}):
+  – Pflege und monatliche Aktualisierung der Tool-Ampel (Kap. 07b)
+  – Ersteinschätzung neuer Tool-Anfragen innerhalb von 48 Stunden (Kap. 07c)
+  – Koordination des Sandbox-Testbetriebs für neue Tools
+  – Koordination von Schulungsmaßnahmen
+  – Ansprechperson bei allen Fragen zur KI-Nutzung: ${ph(ph_email,'[E-MAIL]')}
+  – Beobachtung technologischer und rechtlicher Entwicklungen (EU AI Act, DSGVO)
+
+Datenschutzbeauftragte/r (sofern vorhanden, sonst: [ZUSTÄNDIGE PERSON]):
+  – Prüfung neuer KI-Tools auf DSGVO-Konformität und AV-Verträge
+  – Beteiligung bei Tool-Anfragen mit Datenschutzrelevanz (Kap. 07c)
+  – Durchführung von Datenschutz-Folgenabschätzungen bei Bedarf
+  – Meldung von Datenpannen an die zuständige Aufsichtsbehörde
+
+Marketing / Geschäftsführung:
+  – Erstellung und Pflege von Standard-Disclaimern für alle relevanten Ausgabekanäle (Social Media, Whitepapers, Kundenangebote) gemäß Kap. 07d
+  – Freigabe von KI-generierten Bild- und Medienmaterialien für externe Kommunikation
+
+Alle Mitarbeitenden:
+  – Einhaltung dieses KI-Kodex ohne Ausnahme
+  – Nutzung des Fast-Track-Prozesses bei Interesse an neuen Tools (Kap. 07c) statt eigenständiger Einführung
+  – Verpflichtende Dokumentation genutzter Prompts bei kritischen Kundenprojekten (Kap. 07d)
+  – Vier-Augen-Gegenzeichnung bei High-Stakes-Inhalten sicherstellen (Kap. 07d)
+  – Meldung von Verstößen oder Sicherheitsvorfällen an: ${meldungLabel}
+  – Teilnahme an Pflichtschulungen
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 11 · SCHULUNG UND SENSIBILISIERUNG
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Kompetenz im Umgang mit KI ist seit dem 2. Februar 2025 gesetzliche Pflicht (EU AI Act, Art. 4). Alle Mitarbeitenden, die KI-Tools einsetzen, müssen regelmäßig geschult werden.
+
+  Schulungsformat          Turnus                 Zielgruppe             Mindestdauer
+  ─────────────────────────────────────────────────────────────────────────────
+  Erstschulung/Onboarding  Vor erster KI-Nutzung  Alle Mitarbeitenden    2 Stunden
+  Jährliche Auffrischung   Jährlich               Alle KI-Nutzenden      1 Stunde
+  Spezialisierung          Bei neuen Tools        KI-Verantwortliche     Nach Bedarf
+  Datenschutz-Update       Bei DSGVO-Änderungen   Alle Mitarbeitenden    Nach Bedarf
+
+Schulungsformate in ${BDisplay}: ${schulungText}
+
+Zuständig für die Koordination: ${ph(ph_ansp,'[KI-ANSPRECHPERSON]')} (${verantwLabel}), ${ph(ph_email,'[E-MAIL]')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 12 · VERSTÖSSE UND KONSEQUENZEN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Leichte Verstöße:
+  – Unbewusste Nutzung eines nicht freigegebenen Tools
+  – Fehlende Kennzeichnung von KI-Inhalten im internen Bereich
+  – Erstmalige Nichtteilnahme an einer Pflichtschulung
+  → Konsequenz: Belehrung und Nachschulung
+
+Mittelschwere Verstöße:
+  – Wiederholte Nutzung nicht freigegebener Tools trotz Belehrung
+  – Versehentliche Weitergabe nicht-sensibler interner Daten
+  – Fehlende menschliche Überprüfung bei extern genutzten KI-Outputs
+  → Konsequenz: Schriftliche Abmahnung, ggf. vorübergehender Entzug der KI-Zugänge
+
+Schwere Verstöße:
+  – Vorsätzliche oder fahrlässige Eingabe personenbezogener Kundendaten in externe KI ohne AV-Vertrag
+  – Erstellung von Deepfakes oder täuschenden Medieninhalten
+  – Vorsätzliche Umgehung von Sicherheitsmaßnahmen oder Freigabeprozessen
+  – Weitergabe von Geschäftsgeheimnissen oder vertraulichen Unterlagen über KI-Systeme
+  → Konsequenz: Außerordentliche Kündigung möglich; Meldung an Datenschutzbehörde; ggf. Strafanzeige
+
+Meldung von Verstößen oder Vorfällen: unverzüglich an ${meldungLabel}
+Wichtig: Offenheit schützt — wer Datenpannen sofort meldet, ermöglicht schnelle Schadensbegrenzung.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+KAPITEL 13 · INKRAFTTRETEN & REVISIONSPLAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Dieser KI-Kodex tritt mit Unterzeichnung durch die Geschäftsführung in Kraft. Er wird ${reviewLabel.toLowerCase()} oder bei wesentlichen Änderungen überprüft und angepasst.
+
+  Version  Datum              Änderungsgrund            Genehmigt von
+  ──────────────────────────────────────────────────────────────────
+  1.0      ${ph(ph_datum,'[DATUM]')}        Erstveröffentlichung       ${ph(ph_gf,'[NAME GF]')}
+  1.x      [DATUM]            [Grund eintragen]          [NAME]
+
+Genehmigung & Inkraftsetzung:
+
+Geschäftsführung (${ph(ph_gf,'[NAME]')}):          ______________________  Datum: __________
+KI-Verantwortliche/r (${ph(ph_ansp,'[NAME]')}):    ______________________  Datum: __________
+Datenschutzbeauftragte/r:             ______________________  Datum: __________
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANHANG A · GLOSSAR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+  KI / Künstl. Intelligenz     Systeme, die menschliche Fähigkeiten wie Lernen und Problemlösen maschinell simulieren.
+  Generative KI                KI-Systeme, die neue Inhalte (Text, Bild, Audio, Code) erzeugen können.
+  DSGVO                        Datenschutz-Grundverordnung der EU — regelt die Verarbeitung personenbezogener Daten.
+  AV-Vertrag                   Auftragsverarbeitungsvertrag nach Art. 28 DSGVO — Pflicht bei Datenweitergabe an Drittanbieter.
+  DSFA                         Datenschutz-Folgenabschätzung — Risikoprüfung nach Art. 35 DSGVO bei hohem Verarbeitungsrisiko.
+  EU AI Act                    EU-Verordnung zur Regulierung von KI nach Risikoklassen (in Kraft seit August 2024).
+  Halluzination                Plausibel klingende, aber faktisch falsche Ausgaben von KI-Systemen.
+  Deepfake                     Täuschend echte, KI-generierte Medieninhalte realer Personen.
+  Bias                         Systematische Verzerrungen in KI-Ergebnissen, die Gruppen ungerecht bevorzugen/benachteiligen.
+  Prompt                       Die Eingabe oder Anweisung an ein KI-System.
+  Deployer                     Unternehmen, das ein KI-System betreibt (kein Entwickler) — Rolle von ${BDisplay} gem. EU AI Act.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ANHANG B · TAGES-CHECKLISTE: DARF ICH DIESES KI-TOOL NUTZEN?
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Vor jeder Nutzung kurz prüfen:
+
+  [ ]  Steht das Tool auf der genehmigten Werkzeugliste von ${BDisplay}?
+  [ ]  Enthält mein Prompt keine personenbezogenen Daten (Namen, Adressen, Kontaktinfos)?
+  [ ]  Enthält mein Prompt keine Geschäftsgeheimnisse, Rezepturen oder vertraulichen Unterlagen?
+  [ ]  Enthält mein Prompt keine Passwörter, PINs oder Zugangsdaten?
+  [ ]  Ist ein AV-Vertrag mit dem Anbieter vorhanden (sofern erforderlich)?
+  [ ]  Werde ich das KI-Ergebnis vor der Nutzung auf Richtigkeit prüfen?
+  [ ]  Ist eine menschliche Kontrolle des KI-Outputs sichergestellt?
+  [ ]  Habe ich die KI-Pflichtschulung in ${BDisplay} absolviert?
+  [ ]  Bin ich bereit, für den KI-Output die inhaltliche Verantwortung zu tragen?
+
+Wenn eine Frage mit NEIN beantwortet wird: Tool nicht nutzen.
+Bei Unsicherheit: ${ph(ph_ansp,'[KI-ANSPRECHPERSON]')} kontaktieren — ${ph(ph_email,'[E-MAIL]')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+BESTÄTIGUNG DER KENNTNISNAHME
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Ich bestätige, dass ich den Internen KI-Kodex von ${BDisplay} (Version 1.0, Stand ${ph(ph_datum,'[DATUM]')}) vollständig gelesen und verstanden habe. Ich erkenne ihn als verbindliche Richtlinie für meine berufliche Tätigkeit an und verpflichte mich zur Einhaltung aller darin enthaltenen Regelungen.
+
+Bei Fragen wende ich mich an: ${ph(ph_ansp,'[KI-ANSPRECHPERSON]')} — ${ph(ph_email,'[E-MAIL]')}
+
+Name (Druckschrift):      _________________________________
+
+Abteilung / Funktion:     _________________________________
+
+Eintrittsdatum / Datum:   _________________________________
+
+Unterschrift:             _________________________________
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Interner KI-Kodex | ${BDisplay} | Version 1.0 | Vertraulich – nur interner Gebrauch
+Rechtliche Grundlagen: EU AI Act (VO 2024/1689), DSGVO, BDSG | Erstellt mit KI-Kodex Generator | Stand Mai 2026
+Dieser Kodex ersetzt keine individuelle Rechtsberatung.`;
+
+  KODEX = K;
+
+  const btn = document.getElementById('genBtn');
+  btn.disabled = true; btn.textContent = 'Wird erstellt …';
+  document.getElementById('progWrap').classList.add('on');
+  document.getElementById('outWrap').classList.remove('on');
+
+  setTimeout(()=>{
+    document.getElementById('out').textContent = KODEX;
+    document.getElementById('outWrap').classList.add('on');
+    document.getElementById('outWrap').scrollIntoView({behavior:'smooth',block:'start'});
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="15" height="15" viewBox="0 0 18 18" fill="none"><path d="M9 2L11 7H16L12 10.5L13.5 16L9 13L4.5 16L6 10.5L2 7H7L9 2Z" fill="white"/></svg> Kodex neu erstellen`;
+    document.getElementById('progWrap').classList.remove('on');
+  }, 600);
+}
+
+// ── COPY ───────────────────────────────────────────────────
+function doCopy(){
+  if(!KODEX){showNotification('Bitte zuerst Kodex erstellen.','error');return;}
+  navigator.clipboard.writeText(KODEX).then(()=>{
+    showNotification('✓ In Zwischenablage kopiert!','success');
+    const b=document.getElementById('copyBtn');b.textContent='✓ Kopiert!';
+    setTimeout(()=>b.textContent='📋 Kopieren',2000);
+  }).catch(()=>{
+    const ta=document.createElement('textarea');ta.value=KODEX;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);
+    showNotification('✓ Kopiert!','success');
+    document.getElementById('copyBtn').textContent='✓ Kopiert!';
+    setTimeout(()=>document.getElementById('copyBtn').textContent='📋 Kopieren',2000);
+  });
+}
+
+// ── NOTIFICATION (ersetzt alert()) ─────────────────────────
+function showNotification(msg, type='info'){
+  const existing = document.getElementById('notif-toast');
+  if(existing) existing.remove();
+  const n = document.createElement('div');
+  n.id='notif-toast';
+  const bg = type==='error'?'#E53E3E':type==='success'?'#38A169':'#2D3E50';
+  n.style.cssText=`position:fixed;bottom:24px;right:24px;background:${bg};color:#fff;padding:11px 20px;border-radius:10px;font-size:13px;font-family:var(--fb);box-shadow:0 4px 16px rgba(0,0,0,.18);z-index:9999;animation:slideUp .25s ease`;
+  n.textContent=msg;
+  document.body.appendChild(n);
+  setTimeout(()=>{n.style.opacity='0';n.style.transition='opacity .3s';setTimeout(()=>n.remove(),300);},3000);
+}
+const style=document.createElement('style');
+style.textContent='@keyframes slideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}';
+document.head.appendChild(style);
+
+
+// ── PDF (vollständig überarbeitet: Glossar-Layout, leere Felder, Signaturlinien) ──
+function doPDF(){
+  if(!KODEX||KODEX.trim().length<20){showNotification('Bitte zuerst einen Kodex erstellen.','error');return;}
+  const btn=document.getElementById('pdfBtn');
+  btn.textContent='Wird erstellt …';btn.disabled=true;
+  // Kleiner Delay damit Button-State sichtbar wird
+  setTimeout(()=>{
+    try{ _buildPDF(); }
+    catch(e){ showNotification('PDF-Fehler: '+e.message,'error');console.error(e); }
+    finally{ btn.textContent='⬇ PDF herunterladen';btn.disabled=false; }
+  },50);
+}
+
+function _buildPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF({orientation:'portrait',unit:'mm',format:'a4'});
+
+  // ── Layout ─────────────────────────────────────────────
+  const PW=210,PH=297,ML=18,MR=18,MT=26,MB=26,CW=PW-ML-MR;
+  let y=MT,pg=1;
+
+  // ── Farbpalette ────────────────────────────────────────
+  const TX =[28,45,61];
+  const MU =[130,140,155];
+  const LN =[210,215,222];
+  const GR =[30,130,70];
+  const RD =[185,35,35];
+  const AM =[170,105,0];
+  const NV =[11,31,59];
+  const BL =[0,171,190];
+
+  const fc=c=>doc.setTextColor(c[0],c[1],c[2]);
+  const fd=c=>doc.setDrawColor(c[0],c[1],c[2]);
+  const ff=c=>doc.setFillColor(c[0],c[1],c[2]);
+
+  const betrieb=document.getElementById('firmenname').value.trim()||'';
+  const betriebDisplay=betrieb||'[Unternehmensname]';
+
+  // ── Neue Seite ──────────────────────────────────────────
+  function np(){pg++;doc.addPage();y=MT;}
+  function ck(n){if(y+n>PH-MB)np();}
+
+  // ── Linienfunktionen ────────────────────────────────────
+  function hline(x1,x2,yy,w,col){fd(col||LN);doc.setLineWidth(w||0.25);doc.line(x1,yy,x2,yy);}
+
+  // ── Header / Footer ─────────────────────────────────────
+  function drawHeader(n,total){
+    hline(ML,PW-MR,15,0.25,LN);
+    doc.setFontSize(7.5);doc.setFont('helvetica','normal');fc(MU);
+    doc.text('KI-Kodex  \u00B7  '+betriebDisplay,ML,11.5);
+    doc.text('Seite '+n+' / '+total,PW-MR,11.5,{align:'right'});
+  }
+  function drawFooter(){
+    hline(ML,PW-MR,PH-MB+4,0.25,LN);
+    doc.setFontSize(7);doc.setFont('helvetica','normal');fc(MU);
+    doc.text('Vertraulich \u00B7 Nur f\u00FCr interne Zwecke \u00B7 makerport.de \u00B7 Stand Mai 2026',ML,PH-MB+9);
+  }
+
+  // ── Platzhalter-Render: Leere Felder → leere Zeile (kein Text, nur Linie im Unterschriftsbereich) ──
+  // Gibt true zurück wenn Platzhalter/leer
+  function isPlaceholder(txt){
+    return !txt || txt==='' || /^\[.+\]$/.test(txt.trim());
+  }
+
+  // Zeile rendern: leer → amber-Linie; Platzhaltertext → amber gefärbt; normal → schwarz
+  function renderLine(txt, x, fs, maxW){
+    doc.setFontSize(fs);
+    if(!txt||txt===''){
+      // Leeres Feld: kleine gestrichelte Linie als Platzhalter
+      fc(AM);
+      const lw = Math.min(maxW||40, 38);
+      fd(AM);doc.setLineWidth(0.4);
+      // gestrichelte Linie
+      for(let dx=0;dx<lw;dx+=3){doc.line(x+dx,y,x+dx+1.5,y);}
+      fc(TX);
+    } else if(/\[.+?\]/.test(txt)){
+      fc(AM);doc.text(txt,x,y);fc(TX);
+    } else {
+      fc(TX);doc.text(txt,x,y);
+    }
+  }
+
+  // ── TITELSEITE ─────────────────────────────────────────
+  y=42;
+  doc.setFontSize(8);doc.setFont('helvetica','normal');fc(MU);
+  doc.text('INTERNER KI-KODEX  \u00B7  WHITEPAPER GOVERNANCE  \u00B7  VERTRAULICH',ML,y);
+  y+=11;
+  doc.setFontSize(26);doc.setFont('helvetica','bold');fc(NV);
+  doc.text('Interner KI-Kodex',ML,y);
+  y+=11;
+  doc.setFontSize(15);doc.setFont('helvetica','normal');
+  if(betrieb){fc(TX);doc.text(betrieb,ML,y);}
+  else{fc(AM);// Gestrichelte Linie für leeren Betriebsnamen
+    fd(AM);doc.setLineWidth(0.5);for(let dx=0;dx<80;dx+=4){doc.line(ML+dx,y,ML+dx+2,y);}fc(TX);}
+  y+=10;
+  fd(NV);doc.setLineWidth(0.7);doc.line(ML,y,ML+CW,y);
+  y+=16;
+
+  // Metadaten-Block
+  const ph_d=document.getElementById('ph_datum').value.trim();
+  const ph_gf2=document.getElementById('ph_gf').value.trim();
+  const ph_an=document.getElementById('ph_ansprechperson').value.trim();
+  doc.setFontSize(8.5);
+  const meta=[
+    ['Gültig ab', ph_d],
+    ['Genehmigt durch', ph_gf2],
+    ['KI-Verantwortliche/r', ph_an],
+    ['Version', '1.0'],
+    ['Klassifizierung', 'Intern \u2013 Vertraulich']
+  ];
+  meta.forEach(([k,v])=>{
+    doc.setFont('helvetica','bold');fc(MU);doc.text(k+':',ML,y);
+    doc.setFont('helvetica','normal');
+    if(!v||v===''){
+      // Leeres Feld → gestrichelte Linie
+      fd(AM);doc.setLineWidth(0.35);
+      for(let dx=0;dx<45;dx+=3){doc.line(ML+46+dx,y-1,ML+46+dx+1.5,y-1);}
+    } else if(/\[.+\]/.test(v)){fc(AM);doc.text(v,ML+46,y);}
+    else{fc(TX);doc.text(v,ML+46,y);}
+    fc(TX);y+=5.5;
+  });
+  y+=8;
+  // Trennlinie vor Inhalt
+  hline(ML,ML+CW,y,0.25,LN);
+
+  // ── Zeilen parsen ──────────────────────────────────────
+  const lines=KODEX.split('\n');
+  let inGlossar=false;
+  let glossarBuf=[];
+  let inChecklist=false;
+
+  // FIX: Glossar-Tabelle mit sauberem 2-Spalten-Layout
+  function flushGlossar(){
+    if(!glossarBuf.length)return;
+    const col1=52; // Begriff-Spalte
+    const col2=CW-col1-6; // Definitions-Spalte
+    const gapX=ML+col1+4;
+
+    glossarBuf.forEach(([term,def],gi)=>{
+      const defLines=doc.splitTextToSize(def,col2);
+      const rowH=Math.max(defLines.length*4.8+4, 8);
+      ck(rowH+3);
+
+      // Zebra-Hintergrund für bessere Lesbarkeit
+      if(gi%2===0){
+        ff([247,248,250]);fd([247,248,250]);
+        doc.rect(ML,y-3,CW,rowH,'F');
+      }
+
+      // Begriff-Spalte (bold, NV-Farbe)
+      doc.setFontSize(8.5);doc.setFont('helvetica','bold');fc(NV);
+      const termLines=doc.splitTextToSize(term,col1-2);
+      termLines.forEach((tl,ti)=>doc.text(tl,ML+2,y+ti*4.8));
+
+      // Trennlinie zwischen Spalten
+      fd([220,225,232]);doc.setLineWidth(0.18);doc.line(gapX-2,y-2.5,gapX-2,y+rowH-2);
+
+      // Definitions-Spalte (normal)
+      doc.setFont('helvetica','normal');fc(TX);
+      doc.setFontSize(8.5);
+      defLines.forEach((dl,di)=>doc.text(dl,gapX,y+di*4.8));
+
+      y+=rowH;
+
+      // Trennlinie unter jeder Zeile
+      fd(LN);doc.setLineWidth(0.15);doc.line(ML,y-1,ML+CW,y-1);
+    });
+    glossarBuf=[];
+    inGlossar=false;
+    y+=3;
+  }
+
+  lines.forEach((raw,idx)=>{
+    if(idx<2)return; // Titelzeilen überspringen (auf Titelseite gerendert)
+    const line=raw.trimEnd();
+    const t=line.trim();
+
+    // Glossar-Modus
+    if(inGlossar){
+      // FIX: Klarer Beendigungs-Trigger — nur echter Kapitelwechsel beendet Glossar
+      if(/^[━─]{5,}/.test(t)){
+        flushGlossar();
+        // Linie trotzdem rendern
+        ck(5);fd(LN);doc.setLineWidth(0.25);doc.line(ML,y,ML+CW,y);y+=4;return;
+      }
+      if(/^(KAPITEL\s+|ANHANG\s+B\s+·|BESTÄTIGUNG)/.test(t)){
+        flushGlossar();
+        // Weiter mit normaler Verarbeitung dieser Zeile (kein return)
+      } else {
+        if(t===''){y+=1.5;return;}
+        // Glossar-Eintrag parsen: "  Begriff    Definition" — mind. 3 Spaces als Trenner
+        const gm=line.match(/^\s{2,}(.+?)\s{3,}(.+)/);
+        if(gm){
+          glossarBuf.push([gm[1].trim(), gm[2].trim()]);
+        } else if(glossarBuf.length&&t&&!t.startsWith('━')&&!t.startsWith('─')){
+          // Fortsetzungszeile der letzten Definition
+          glossarBuf[glossarBuf.length-1][1]+=' '+t;
+        }
+        return;
+      }
+    }
+
+    if(t===''){y+=2.8;return;}
+
+    // Trennlinien
+    if(/^[━─]{5,}/.test(t)){
+      ck(5);fd(LN);doc.setLineWidth(0.25);doc.line(ML,y,ML+CW,y);y+=4;return;
+    }
+
+    // KAPITEL / ANHANG Überschriften
+    if(/^(KAPITEL|ANHANG)\s+[\dA-Za-z]+/.test(t)){
+      ck(18);y+=7;
+      // Hintergrund-Balken für Kapitelüberschrift
+      ff(NV);fd(NV);doc.rect(ML,y-5.5,CW,9,'F');
+      doc.setFontSize(9.5);doc.setFont('helvetica','bold');fc([255,255,255]);
+      doc.text(t,ML+3,y);
+      y+=8;
+      fc(TX);
+      // Glossar-Modus: ANHANG A = Glossar
+      if(/^ANHANG\s+A\s+·\s+GLOSSAR/.test(t))inGlossar=true;
+      return;
+    }
+
+    // INHALTSVERZEICHNIS und andere ALL-CAPS Sub-Überschriften
+    if(t===t.toUpperCase()&&t.length>3&&/[A-ZÄÖÜ]{3}/.test(t)
+      &&!/^[✔✘⚠]/.test(t)&&!t.startsWith('[')&&!t.startsWith('–')
+      &&!t.startsWith('→')&&t.length<100){
+      ck(10);y+=3;
+      doc.setFontSize(8.5);doc.setFont('helvetica','bold');fc(NV);
+      doc.text(t,ML,y);
+      fd(LN);doc.setLineWidth(0.3);doc.line(ML,y+2,ML+CW,y+2);
+      y+=8;fc(TX);return;
+    }
+
+    // ✔ / ✘ / ⚠ Symbol-Zeilen
+    const symM=t.match(/^([✔✓✘⊗⚠])\s{1,3}(.+)/);
+    if(symM){
+      const sym=symM[1];const content=symM[2];
+      const isOk=sym==='✔'||sym==='✓';
+      const isBad=sym==='✘'||sym==='⊗';
+      const isWarn=sym==='⚠';
+      ck(9);
+      // Symbol-Kreis/Hintergrund
+      const symCol=isOk?GR:isBad?RD:[200,140,0];
+      ff(symCol);fd(symCol);doc.circle(ML+2.5,y-1.8,2.8,'F');
+      doc.setFontSize(8);doc.setFont('helvetica','bold');fc([255,255,255]);
+      doc.text(isOk?'\u2713':isBad?'\u2717':'!',ML+2.5,y-0.8,{align:'center'});
+      // Inhalt
+      doc.setFontSize(9);doc.setFont('helvetica','normal');fc(TX);
+      const ww=doc.splitTextToSize(content,CW-10);
+      ww.forEach((wl,wi)=>{
+        if(wi>0)ck(5.5);
+        // Platzhalter in Amber
+        if(/\[.+?\]/.test(wl)){fc(AM);doc.text(wl,ML+9,y);}
+        else{fc(TX);doc.text(wl,ML+9,y);}
+        y+=5.2;
+      });
+      y+=1.5;return;
+    }
+
+    // Nummerierte Liste (1.–8. Grundsätze)
+    const nmM=t.match(/^(\d+)\.\s+(.+)/);
+    if(nmM&&parseInt(nmM[1])<=20){
+      ck(9);
+      doc.setFontSize(9);doc.setFont('helvetica','bold');fc(NV);
+      const ns=nmM[1]+'.';doc.text(ns,ML,y);
+      doc.setFont('helvetica','normal');fc(TX);
+      const iw=ML+doc.getTextWidth(ns)+3;
+      const ww=doc.splitTextToSize(nmM[2],CW-(iw-ML)-2);
+      ww.forEach((wl,wi)=>{if(wi>0)ck(5.5);
+        if(/\[.+?\]/.test(wl)){fc(AM);doc.text(wl,iw,y);}else{fc(TX);doc.text(wl,iw,y);}
+        y+=5.2;});
+      y+=1;return;
+    }
+
+    // Checkliste [ ]
+    if(t.startsWith('[ ]')){
+      ck(8);
+      fd(LN);doc.setLineWidth(0.45);doc.rect(ML,y-3.5,3.8,3.8,'S');
+      doc.setFontSize(9);doc.setFont('helvetica','normal');fc(TX);
+      const ww=doc.splitTextToSize(t.slice(3).trim(),CW-9);
+      ww.forEach((wl,wi)=>{if(wi>0)ck(5.5);
+        if(/\[.+?\]/.test(wl)){fc(AM);doc.text(wl,ML+8,y);}else{fc(TX);doc.text(wl,ML+8,y);}
+        y+=5.2;});
+      y+=1;return;
+    }
+
+    // Strich- / Pfeil-Aufzählungen
+    if(t.startsWith('–')||t.startsWith('→')){
+      ck(6);
+      const isArrow=t.startsWith('→');
+      if(isArrow){doc.setFontSize(9);doc.setFont('helvetica','bold');fc(NV);doc.text('\u2192',ML,y);}
+      else{ff(MU);fd(MU);doc.circle(ML+1.8,y-1.2,1.1,'F');}
+      doc.setFontSize(9);doc.setFont('helvetica','normal');fc(TX);
+      const cnt=t.slice(1).trim();
+      const ww=doc.splitTextToSize(cnt,CW-9);
+      ww.forEach((wl,wi)=>{if(wi>0)ck(5.2);
+        if(/\[.+?\]/.test(wl)){fc(AM);doc.text(wl,ML+7,y);}else{fc(TX);doc.text(wl,ML+7,y);}
+        y+=5.2;});
+      y+=0.6;return;
+    }
+
+    // FIX: Unterschrifts-Zeilen — leere Felder korrekt als Leerzeichen + Linie behandelt
+    if(/^(Geschäftsführung|KI-Verantwortliche|Datenschutzbeauftragte|Name \(Druck|Abteilung|Eintrittsdatum|Unterschrift|Marketing)/.test(t)){
+      ck(12);
+      doc.setFontSize(9);doc.setFont('helvetica','normal');
+      // Bezeichnung extrahieren (vor den Unterstrichen)
+      const label=t.replace(/\s*_{5,}.*/,'').replace(/\s*Datum:\s*_{3,}.*/,'').trim();
+      fc(MU);doc.setFont('helvetica','bold');doc.text(label,ML,y);
+      // Feste Linie für Unterschrift — immer ab Position 60mm vom Rand
+      const lineStart=ML+60;
+      const lineEnd=ML+CW-5;
+      fd(TX);doc.setLineWidth(0.4);doc.line(lineStart,y+0.5,lineEnd,y+0.5);
+      // Datum-Zusatzlinie wenn vorhanden
+      if(t.includes('Datum:')){
+        const dateX=lineStart+4;
+        fc(MU);doc.setFont('helvetica','normal');doc.text('Datum:',ML+2,y+7);
+        fd(TX);doc.setLineWidth(0.4);doc.line(ML+20,y+7.5,ML+60,y+7.5);
+        y+=14;
+      } else {
+        y+=10;
+      }
+      return;
+    }
+
+    // Interne Fusszeile überspringen
+    if(t.startsWith('Interner KI-Kodex |')||t.startsWith('Rechtliche Grund')||t.startsWith('Dieser Kodex')){return;}
+
+    // Metadaten-Zeilen (Erstellt von, Gültig ab etc.) auf Seite 1 überspringen (bereits auf Titelseite)
+    if(/^(Erstellt von:|Gültig ab:|Nächste Revision:|Genehmigt durch:|Version:|Klassifizierung:)/.test(t)){return;}
+
+    // Einrückung (2+ führende Leerzeichen, kein Aufzählungszeichen)
+    if(line.startsWith('  ')&&!t.startsWith('–')&&!t.startsWith('→')&&!t.startsWith('[')&&!t.startsWith('✔')&&!t.startsWith('✘')&&!t.startsWith('⚠')){
+      ck(6);doc.setFontSize(8.8);doc.setFont('helvetica','normal');
+      const ww=doc.splitTextToSize(t,CW-6);
+      ww.forEach((wl,wi)=>{if(wi>0)ck(5.2);
+        if(/\[.+?\]/.test(wl)){fc(AM);doc.text(wl,ML+5,y);}else{fc(TX);doc.text(wl,ML+5,y);}
+        y+=5.0;});
+      y+=0.5;return;
+    }
+
+    // Normaler Fliesstext
+    doc.setFontSize(9);doc.setFont('helvetica','normal');fc(TX);
+    const ww=doc.splitTextToSize(t,CW);
+    ww.forEach(wl=>{ck(5.5);
+      if(/\[.+?\]/.test(wl)){fc(AM);doc.text(wl,ML,y);}else{fc(TX);doc.text(wl,ML,y);}
+      y+=5.2;});
+    y+=1;
+  });
+
+  if(inGlossar)flushGlossar();
+
+  // Header + Footer auf allen Seiten
+  const total=doc.internal.getNumberOfPages();
+  for(let p=1;p<=total;p++){
+    doc.setPage(p);
+    drawHeader(p,total);
+    drawFooter();
+  }
+
+  const fn3=document.getElementById('firmenname').value.trim();
+  doc.save('KI-Kodex'+(fn3?' - '+fn3:'')+'.pdf');
+}
+
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key==='Enter')generate();});
+
+// ── MODAL ──────────────────────────────────────────────────
+const MODAL_CONTENT = {
+  impressum: {
+    title: 'Impressum',
+    html: `
+      <p style="margin-bottom:16px;color:#4A5568;font-size:12px">Angaben gemäß § 5 TMG</p>
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin-bottom:8px">Betreiber & Verantwortlicher</h3>
+      <p><strong>Stralsunder Innovations- und Gründerzentrum GmbH</strong><br>
+      Geschäftsführer: Peter Fürst<br>
+      Registergericht: Amtsgericht Stralsund<br>
+      Registernummer: HRB 4079<br>
+      USt-IdNr.: DE186842546<br>
+      Internet: <a href="https://www.sig-hst.de" target="_blank" style="color:#00ABBE">www.sig-hst.de</a></p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">Anschrift</h3>
+      <p><strong>MakerPort Stralsund</strong><br>
+      Wasserstraße 68<br>
+      18439 Stralsund</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">Kontakt</h3>
+      <p>Telefon: <a href="tel:+491704630618" style="color:#00ABBE">+49 170 4630618</a><br>
+      Tel. (Büro): +49 3831 20 38 15 4<br>
+      E-Mail: <a href="mailto:info@makerport.de" style="color:#00ABBE">info@makerport.de</a></p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">Dieses Tool</h3>
+      <p>Der KI-Kodex Generator ist ein kostenloses Angebot des MakerPort Stralsund. Er wird ohne Gewährleistung bereitgestellt und ersetzt keine individuelle Rechts- oder Compliance-Beratung.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">Haftungsausschluss</h3>
+      <p>Als Diensteanbieter sind wir gemäß § 7 Abs. 1 TMG für eigene Inhalte verantwortlich. Die durch dieses Tool erzeugten Kodex-Dokumente sind Vorlagen ohne Rechtsverbindlichkeit. Für deren Vollständigkeit, Richtigkeit oder rechtliche Eignung wird keine Haftung übernommen.</p>
+
+      <p style="margin-top:20px;font-size:11px;color:#8A9BB0">Stand: Mai 2026</p>`
+  },
+  datenschutz: {
+    title: 'Datenschutzerklärung',
+    html: `
+      <p style="margin-bottom:16px;color:#4A5568;font-size:12px">Gemäß DSGVO und BDSG</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin-bottom:8px">1. Verantwortlicher</h3>
+      <p>Stralsunder Innovations- und Gründerzentrum GmbH (MakerPort Stralsund)<br>
+      Wasserstraße 68, 18439 Stralsund<br>
+      E-Mail: <a href="mailto:info@makerport.de" style="color:#00ABBE">info@makerport.de</a></p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">2. Keine Datenspeicherung durch dieses Tool</h3>
+      <p>Der KI-Kodex Generator verarbeitet <strong>keine personenbezogenen Daten</strong> auf einem Server. Alle Eingaben (Betriebsname, Ansprechpartner, E-Mail etc.) verbleiben ausschließlich lokal in Ihrem Browser und werden weder übertragen noch gespeichert. Es wird keine Verbindung zu externen KI-APIs hergestellt. Der generierte Kodex existiert nur in Ihrem Browser-Speicher bis Sie die Seite verlassen oder neu laden.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">3. Technisch notwendige Cookies</h3>
+      <p>Diese Website verwendet ausschließlich technisch notwendige Cookies, die für den Betrieb der Seite erforderlich sind. Es werden <strong>keine Tracking-, Analyse- oder Werbe-Cookies</strong> eingesetzt. Eine Einwilligung ist dafür nicht erforderlich (§ 25 Abs. 2 TTDSG).</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">4. Externe Ressourcen</h3>
+      <p>Beim Aufruf dieser Seite werden folgende externe Ressourcen geladen:</p>
+      <ul style="margin:8px 0 8px 18px;line-height:2">
+        <li><strong>Google Fonts</strong> (fonts.googleapis.com) — zur Darstellung der Schriftarten. Dabei kann Ihre IP-Adresse an Google übermittelt werden. Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO (berechtigtes Interesse an professioneller Darstellung).</li>
+        <li><strong>cdnjs.cloudflare.com</strong> — zur Auslieferung der jsPDF-Bibliothek für die PDF-Generierung im Browser.</li>
+      </ul>
+      <p>Beide Anbieter sind durch EU-Standardvertragsklauseln abgesichert.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">5. Ihre Rechte</h3>
+      <p>Da keine personenbezogenen Daten durch uns verarbeitet werden, entfällt die Notwendigkeit von Auskunfts-, Löschungs- oder Berichtigungsanfragen bezüglich dieses Tools. Bei Fragen zur Hauptwebsite des MakerPort wenden Sie sich an: <a href="mailto:info@makerport.de" style="color:#00ABBE">info@makerport.de</a>.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">6. Aufsichtsbehörde</h3>
+      <p>Zuständige Aufsichtsbehörde: Der Landesbeauftragte für Datenschutz und Informationsfreiheit Mecklenburg-Vorpommern, Schloss Schwerin, 19053 Schwerin.</p>
+
+      <p style="margin-top:20px;font-size:11px;color:#8A9BB0">Stand: Mai 2026</p>`
+  },
+  agb: {
+    title: 'AGB & Nutzungsbedingungen',
+    html: `
+      <p style="margin-bottom:16px;color:#4A5568;font-size:12px">Für die Nutzung des KI-Kodex Generators</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin-bottom:8px">1. Anbieter & Geltungsbereich</h3>
+      <p>Diese Nutzungsbedingungen gelten für die kostenlose Nutzung des KI-Kodex Generators, einem Angebot der Stralsunder Innovations- und Gründerzentrum GmbH (MakerPort Stralsund), Wasserstraße 68, 18439 Stralsund.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">2. Leistungsbeschreibung</h3>
+      <p>Der KI-Kodex Generator erstellt auf Basis der Nutzereingaben automatisiert Vorlagen für interne KI-Verhaltenskodizes. Die Erstellung erfolgt vollständig lokal im Browser des Nutzers. Es findet keine Datenübertragung an Server des Anbieters statt. Die Nutzung ist kostenlos und ohne Registrierung möglich.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">3. Kein Rechtsrat — wichtiger Hinweis</h3>
+      <p>Die durch dieses Tool erzeugten Dokumente sind <strong>Vorlagen ohne Rechtsverbindlichkeit</strong>. Sie ersetzen ausdrücklich keine individuelle rechtliche, datenschutzrechtliche oder compliance-spezifische Beratung durch qualifizierte Fachleute. Der Anbieter übernimmt keine Gewähr für die rechtliche Eignung, Vollständigkeit oder Aktualität der erzeugten Inhalte. Die Nutzung erfolgt auf eigene Verantwortung des Anwenders.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">4. Haftungsausschluss</h3>
+      <p>Der Anbieter haftet nicht für Schäden, die aus der Verwendung der generierten Dokumente entstehen, insbesondere nicht für Schäden aufgrund fehlerhafter, unvollständiger oder veralteter Inhalte. Die Haftung für grobe Fahrlässigkeit und Vorsatz bleibt unberührt.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">5. Urheberrecht & Nutzungsrecht</h3>
+      <p>Die erzeugten Kodex-Dokumente darf der Nutzer für interne betriebliche Zwecke frei verwenden, anpassen und vervielfältigen. Eine kommerzielle Weitergabe oder ein Weiterverkauf der generierten Dokumente als eigenständiges Produkt ist nicht gestattet. Das Design und der Quellcode des Generators bleiben Eigentum des Anbieters.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">6. Verfügbarkeit</h3>
+      <p>Der Anbieter bemüht sich um eine störungsfreie Verfügbarkeit des Generators, übernimmt jedoch keine Garantie für ununterbrochene Verfügbarkeit. Wartungsarbeiten, technische Störungen oder Weiterentwicklungen können zu temporären Ausfällen führen.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">7. Änderungen</h3>
+      <p>Der Anbieter behält sich vor, diese Nutzungsbedingungen jederzeit zu ändern. Die jeweils aktuelle Fassung ist unter <a href="https://makerport.de" target="_blank" style="color:#00ABBE">makerport.de</a> abrufbar.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">8. Anwendbares Recht & Gerichtsstand</h3>
+      <p>Es gilt deutsches Recht. Gerichtsstand für alle Streitigkeiten ist, soweit gesetzlich zulässig, Stralsund.</p>
+
+      <h3 style="font-size:14px;font-weight:600;color:#2D3E50;margin:18px 0 8px">9. Kontakt</h3>
+      <p>MakerPort Stralsund · Wasserstraße 68 · 18439 Stralsund<br>
+      E-Mail: <a href="mailto:info@makerport.de" style="color:#00ABBE">info@makerport.de</a></p>
+
+      <p style="margin-top:20px;font-size:11px;color:#8A9BB0">Stand: Mai 2026</p>`
+  }
+};
+
+function openModal(key){
+  const c = MODAL_CONTENT[key];
+  if(!c) return;
+  document.getElementById('modal-title').textContent = c.title;
+  document.getElementById('modal-content').innerHTML = c.html;
+  const ov = document.getElementById('modal-overlay');
+  ov.style.display = 'flex';
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(){
+  document.getElementById('modal-overlay').style.display = 'none';
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+</script>
+</body>
+</html>
