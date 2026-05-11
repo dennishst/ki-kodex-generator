@@ -158,10 +158,33 @@ html.high-contrast .btn-ol{
 }
 body{font-family:var(--fb);background:var(--bg);color:var(--t1);line-height:1.6}
 
-nav{position:sticky;top:0;z-index:100;background:#0B1F3B;backdrop-filter:blur(10px);border-bottom:none;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
-.logo{display:flex;align-items:center;gap:9px;font-family:var(--fd);font-size:15px;font-weight:700;color:#fff;text-decoration:none}
-.logo-sq{width:28px;height:28px;border-radius:7px;background:var(--or);display:flex;align-items:center;justify-content:center}
-.nav-pill{font-size:11px;padding:3px 10px;background:rgba(0,171,190,.18);color:#7EDCEA;border-radius:20px;font-weight:500;border:1px solid rgba(0,171,190,.3)}
+/* ── NAV DESKTOP ────────────────────────────────────────── */
+nav{
+  position:sticky;top:0;z-index:100;
+  background:#0B1F3B;
+  border-bottom:2px solid rgba(0,171,190,.25);
+  padding:0 2.5rem;
+  display:flex;align-items:center;justify-content:space-between;
+  height:72px;
+  box-shadow:0 2px 16px rgba(0,0,0,.22);
+}
+.nav-center{
+  position:absolute;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:2px;
+  pointer-events:none;
+}
+.nav-title{font-family:var(--fd);font-size:17px;font-weight:700;color:#fff;letter-spacing:.01em;white-space:nowrap}
+.nav-sub{font-size:10px;color:rgba(0,171,190,.75);letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.nav-pill{font-size:11px;padding:4px 12px;background:rgba(0,171,190,.15);color:#7EDCEA;border-radius:20px;font-weight:500;border:1px solid rgba(0,171,190,.28);white-space:nowrap}
+.nav-logo img{width:160px;height:auto;display:block}
+
+/* ── NAV MOBILE ─────────────────────────────────────────── */
+@media(max-width:767px){
+  nav{height:56px;padding:0 1rem}
+  .nav-logo img{width:120px}
+  .nav-center{display:none}
+  .nav-pill{font-size:10px;padding:3px 8px}
+}
 
 /* FIRM BANNER */
 .firm-banner{background:#FAFAFA;border-bottom:1px solid var(--bd);padding:12px 2rem;display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;box-shadow:var(--s1)}
@@ -265,11 +288,52 @@ nav{position:sticky;top:0;z-index:100;background:#0B1F3B;backdrop-filter:blur(10
 footer{background:var(--nv);color:rgba(255,255,255,.4);text-align:center;padding:24px 2rem;font-size:11px}
 footer strong{color:rgba(255,255,255,.7)}
 
+/* ── MOBILE VOLLSTÄNDIG ─────────────────────────────────── */
 @media(max-width:600px){
-  .feats,.rg{flex-direction:column}.g2,.g3,.checks2{grid-template-columns:1fr}
-  .card{padding:15px 13px}.out-body{padding:16px 13px}
-  .hero{padding:36px 1.5rem 48px}.out-bar{flex-direction:column;align-items:flex-start}
-  .firm-banner{flex-direction:column;align-items:flex-start}.firm-input{width:100%}
+  /* Layout */
+  .main{padding:0 1rem;margin:24px auto 60px}
+  .feats{flex-direction:column;gap:8px;padding:0 1rem;margin:-16px auto 0}
+  .feat{padding:12px 14px;display:flex;align-items:center;gap:12px;text-align:left}
+  .feat-ic{margin:0;flex-shrink:0;width:32px;height:32px}
+  .rg{flex-direction:column}
+  .g2,.g3,.checks2{grid-template-columns:1fr}
+
+  /* Karten */
+  .card{padding:14px 13px;border-radius:12px}
+  .card-head{margin-bottom:12px}
+  .card-head h2{font-size:13px}
+  .out-body{padding:14px 13px}
+  .out-bar{flex-direction:column;align-items:flex-start;gap:10px}
+  .btns{width:100%;justify-content:stretch}
+  .btns button{flex:1;justify-content:center}
+
+  /* Firm banner */
+  .firm-banner{flex-direction:column;align-items:stretch;padding:10px 1rem;gap:10px}
+  .firm-input{width:100%}
+
+  /* Hero */
+  .hero{padding:32px 1rem 52px}
+  .hero h1{font-size:clamp(20px,6vw,28px);letter-spacing:-.2px}
+  .hero p{font-size:14px}
+  .badges{gap:5px}
+  .badge{font-size:10px;padding:3px 8px}
+  .eyebrow{font-size:11px;padding:3px 10px}
+
+  /* Tags & Checks */
+  .tag{font-size:11px;padding:5px 10px}
+  .field label{font-size:12px}
+  .field select,.field textarea,.field input[type=text]{font-size:14px;padding:9px 11px}
+
+  /* Generate button */
+  .gen-btn{width:100%;justify-content:center;padding:13px 20px}
+  .gen-hint{font-size:11px}
+
+  /* Output */
+  #out{font-size:12px;line-height:1.75}
+
+  /* Footer */
+  footer{padding:20px 1rem;font-size:11px}
+  footer img{height:36px !important}
 }
 .card{animation:fu .28s ease both}
 @keyframes fu{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
@@ -279,10 +343,13 @@ footer strong{color:rgba(255,255,255,.7)}
 <body>
 
 <nav>
-  <a href="https://makerport.de/" target="_blank" rel="noopener" style="display:flex;align-items:center;text-decoration:none;flex-shrink:0">
-    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="width:180px;height:auto;object-fit:contain">
+  <a href="https://makerport.de/" target="_blank" rel="noopener" class="nav-logo" style="display:flex;align-items:center;text-decoration:none;flex-shrink:0">
+    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund">
   </a>
-  <span style="position:absolute;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em;white-space:nowrap">KI-Kodex Generator</span>
+  <div class="nav-center">
+    <span class="nav-title">KI-Kodex Generator</span>
+    <span class="nav-sub">für Hotels · Gastronomie · Handwerk & Co.</span>
+  </div>
   <span class="nav-pill" style="flex-shrink:0">Kostenlos · Kein Konto · Keine Speicherung</span>
 </nav>
 
@@ -1422,7 +1489,10 @@ function _buildPDF(){
   fd([200,210,220]);doc.setLineWidth(0.3);doc.line(ML,y,ML+CW,y);
   y+=7;
   doc.setFontSize(8);doc.setFont('helvetica','italic');fc(MU);
-  doc.text('Stand: Mai 2026 \u00B7 Version 1.0 \u00B7 Vertraulich – nur interner Gebrauch',ML,y);
+  doc.text('Stand: Mai 2026 \u00B7 Version 1.0 \u00B7 Vertraulich \u2013 nur interner Gebrauch',ML,y);
+
+  // ── NACH TOC: immer neue Seite für Kapitel 1 ─────────────
+  np();
 
   // ── HAUPTINHALT PARSEN ───────────────────────────────────
   let inGlossar=false;
@@ -1559,9 +1629,9 @@ function _buildPDF(){
       ck(5);fd(LN);doc.setLineWidth(0.25);doc.line(ML,y,ML+CW,y);y+=4;return;
     }
 
-    // KAPITEL / ANHANG — immer auf neuer Seite wenn zu wenig Platz (mind. 30mm Body danach)
+    // KAPITEL / ANHANG — immer neue Seite
     if(/^(KAPITEL|ANHANG)\s+[\dA-Za-z]+/.test(t)){
-      ckHeading(16, 30);
+      np();
       y+=7;
       ff(NV);fd(NV);doc.rect(ML,y-5.5,CW,9,'F');
       doc.setFontSize(9.5);doc.setFont('helvetica','bold');fc([255,255,255]);
@@ -1582,7 +1652,7 @@ function _buildPDF(){
       y+=8;fc(TX);return;
     }
 
-    // ✔ / ✘ / ⚠ Ampel-Symbole
+    // ✔ / ✘ / ⚠ Ampel-Symbole — nur farbige Kreise, keine Icons
     const symM=t.match(/^([✔✓✘⊗⚠])\s{1,3}(.+)/);
     if(symM){
       const sym=symM[1];
@@ -1590,32 +1660,12 @@ function _buildPDF(){
       const isOk =sym==='✔'||sym==='✓';
       const isBad=sym==='✘'||sym==='⊗';
       ck(9);
-      const CX=ML+3;  // Kreis-Mittelpunkt X
-      const CY=y-2;   // Kreis-Mittelpunkt Y (leicht über Baseline)
-      const CR=3.2;   // Radius
-      const symCol=isOk?GR:isBad?RD:YL;
-      // Farbiger Kreis
+      const CX=ML+3;
+      const CY=y-2;
+      const CR=3.0;
+      // Ampelfarbe: grün / rot / gelb — ausgefüllter Kreis, kein Icon
+      const symCol=isOk?[34,139,34]:isBad?[192,32,32]:[210,140,0];
       ff(symCol);fd(symCol);doc.circle(CX,CY,CR,'F');
-      // Symbol exakt mittig — manuell mit getTextWidth zentrieren
-      doc.setFont('helvetica','bold');
-      if(isOk){
-        // Haken: Unicode ✓ — als normales Zeichen rendern
-        doc.setFontSize(7.5);fc([255,255,255]);
-        const icon='\u2713';
-        const iw2=doc.getTextWidth(icon);
-        doc.text(icon,CX-iw2/2,CY+2.2);
-      } else if(isBad){
-        // Kreuz: X als zwei Linien zeichnen — zuverlässiger als Unicode
-        fd([255,255,255]);doc.setLineWidth(0.8);
-        doc.line(CX-1.4,CY-1.4,CX+1.4,CY+1.4);
-        doc.line(CX+1.4,CY-1.4,CX-1.4,CY+1.4);
-      } else {
-        // Ausrufezeichen
-        doc.setFontSize(9);fc([255,255,255]);
-        const icon2='!';
-        const iw3=doc.getTextWidth(icon2);
-        doc.text(icon2,CX-iw3/2,CY+2.5);
-      }
       // Inhalt rechts vom Kreis
       doc.setFontSize(9);doc.setFont('helvetica','normal');fc(TX);
       const ww=doc.splitTextToSize(content,CW-11);
