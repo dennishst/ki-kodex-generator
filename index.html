@@ -1181,20 +1181,20 @@ Leichte Verstöße:
   – Unbewusste Nutzung eines nicht freigegebenen Tools
   – Fehlende Kennzeichnung von KI-Inhalten im internen Bereich
   – Erstmalige Nichtteilnahme an einer Pflichtschulung
-  ⇒ Konsequenz: Belehrung und Nachschulung
+⇒ Konsequenz: Belehrung und Nachschulung
 
 Mittelschwere Verstöße:
   – Wiederholte Nutzung nicht freigegebener Tools trotz Belehrung
   – Versehentliche Weitergabe nicht-sensibler interner Daten
   – Fehlende menschliche Überprüfung bei extern genutzten KI-Outputs
-  ⇒ Konsequenz: Schriftliche Abmahnung, ggf. vorübergehender Entzug der KI-Zugänge
+⇒ Konsequenz: Schriftliche Abmahnung, ggf. vorübergehender Entzug der KI-Zugänge
 
 Schwere Verstöße:
   – Vorsätzliche oder fahrlässige Eingabe personenbezogener Kundendaten in externe KI ohne AV-Vertrag
   – Erstellung von Deepfakes oder täuschenden Medieninhalten
   – Vorsätzliche Umgehung von Sicherheitsmaßnahmen oder Freigabeprozessen
   – Weitergabe von Geschäftsgeheimnissen oder vertraulichen Unterlagen über KI-Systeme
-  ⇒ Konsequenz: Außerordentliche Kündigung möglich; Meldung an Datenschutzbehörde; ggf. Strafanzeige
+⇒ Konsequenz: Außerordentliche Kündigung möglich; Meldung an Datenschutzbehörde; ggf. Strafanzeige
 
 Meldung von Verstößen oder Vorfällen: unverzüglich an ${meldungLabel}
 Wichtig: Offenheit schützt — wer Datenpannen sofort meldet, ermöglicht schnelle Schadensbegrenzung.
@@ -1432,45 +1432,47 @@ function _buildPDF(){
   y+=10;
   hline(ML,ML+CW,y,0.25,LN);
 
-  // ── INHALTSVERZEICHNIS — eigene Seite ────────────────────
   np();
 
-  // TOC-Überschrift — kein Balken, nur sauberer Titel
-  doc.setFontSize(16);doc.setFont('helvetica','bold');fc(NV);
+  // ── INHALTSVERZEICHNIS — eigene Seite ────────────────────
+  // Überschrift
+  doc.setFontSize(18);doc.setFont('helvetica','bold');fc(NV);
   doc.text('Inhaltsverzeichnis',ML,y);
-  y+=2;
-  fd([200,210,220]);doc.setLineWidth(0.4);doc.line(ML,y+2,ML+CW,y+2);
-  y+=12;
+  y+=3;
+  fd([200,210,220]);doc.setLineWidth(0.5);doc.line(ML,y+1,ML+CW,y+1);
+  y+=10;
 
-  // TOC Zeilen-Funktion: feste Spaltenbreite Nummer | Titel | Punkte-Leader
+  // Beschreibungszeile unter Überschrift
+  doc.setFontSize(8.5);doc.setFont('helvetica','normal');fc(MU);
+  doc.text('Dieser Kodex enthält '+
+    (KODEX.split('\n').filter(l=>/^KAPITEL\s+\d+/.test(l.trim())).length||15)+
+    ' Kapitel sowie Glossar und Tages-Checkliste.',ML,y);
+  y+=10;
+
+  // TOC-Zeile: Nummer | fester Tab | Titel
+  const NUM_X  = ML;          // Nummern-Startpunkt
+  const TITLE_X= ML+28;       // Titel-Startpunkt — gleicher Abstand für alle
+  const textMaxW = CW-28-2;
+
   function tocRow(num,title){
-    const NUM_COL =22;  // feste Breite für Nummer — gleicher Abstand zu allen Titeln
-    const pageColW=0;   // keine Seitenzahl-Spalte (leer)
-    const textMaxW=CW-NUM_COL-4;
-
-    doc.setFontSize(10.5);
-    // Nummer — bold, NV, rechtsbündig in der Nummernspalte
-    doc.setFont('helvetica','bold');fc(NV);
-    doc.text(num,ML+NUM_COL-2,y,{align:'right'});
-
+    ck(10);
+    // Nummer — bold, NV
+    doc.setFontSize(10);doc.setFont('helvetica','bold');fc(NV);
+    doc.text(num,NUM_X,y);
     // Titel — normal, TX
     doc.setFont('helvetica','normal');fc(TX);
-    const titleText=doc.splitTextToSize(title,textMaxW)[0];
-    doc.text(titleText,ML+NUM_COL+2,y);
-
-    // Punkt-Leader: von Titelende bis rechten Rand
-    doc.setFontSize(9);
-    const titleW=doc.getTextWidth(titleText);
-    const dotStart=ML+NUM_COL+2+titleW+3;
-    const dotEnd  =ML+CW-1;
-    fc([195,205,218]);
-    let dx=dotStart;
-    while(dx<dotEnd-1){doc.text('.',dx,y-0.3);dx+=2.5;}
-
-    y+=9;  // großzügiger Zeilenabstand
+    const lines=doc.splitTextToSize(title,textMaxW);
+    doc.text(lines[0],TITLE_X,y);
+    // Punkt-Leader
+    doc.setFontSize(8.5);fc([200,210,222]);
+    const tw=doc.getTextWidth(lines[0]);
+    let dx=TITLE_X+tw+3;
+    const de=ML+CW;
+    while(dx<de-1){doc.text('.',dx,y-0.2);dx+=2.4;}
+    y+=9;
   }
 
-  // TOC aus Kodex extrahieren
+  // TOC-Einträge aus Kodex extrahieren
   {
     const allL=KODEX.split('\n');
     let inT=false;
@@ -1479,20 +1481,20 @@ function _buildPDF(){
       if(t2==='INHALTSVERZEICHNIS'){inT=true;return;}
       if(inT){
         if(t2===''||/^[━─]{5,}/.test(t2)){inT=false;return;}
-        const m=t2.match(/^([\dA-Z][0-9a-z]*)\s{1,4}(.+)/);
+        const m=t2.match(/^([0-9A-Z][0-9a-z]*)\s{1,6}(.+)/);
         if(m)tocRow(m[1],m[2]);
       }
     });
   }
 
   y+=6;
-  fd([200,210,220]);doc.setLineWidth(0.3);doc.line(ML,y,ML+CW,y);
-  y+=7;
-  doc.setFontSize(8);doc.setFont('helvetica','italic');fc(MU);
+  fd([200,210,220]);doc.setLineWidth(0.25);doc.line(ML,y,ML+CW,y);
+  y+=6;
+  doc.setFontSize(7.5);doc.setFont('helvetica','italic');fc(MU);
   doc.text('Stand: Mai 2026 \u00B7 Version 1.0 \u00B7 Vertraulich \u2013 nur interner Gebrauch',ML,y);
 
-  // TOC hat eigene Seite — Kapitel 01 beginnt auf neuer Seite
-  np();.
+  // Kapitel 01 beginnt auf neuer Seite
+  np();
 
   // ── HAUPTINHALT PARSEN ───────────────────────────────────
   let inGlossar=false;
