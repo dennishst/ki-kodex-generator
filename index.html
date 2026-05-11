@@ -22,6 +22,140 @@
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+
+/* ── SCHRIFTGRÖSSEN-KLASSEN ─────────────────────────────── */
+html.fs-large body,
+html.fs-large .card,
+html.fs-large .field label,
+html.fs-large .field select,
+html.fs-large .field textarea,
+html.fs-large .field input[type=text],
+html.fs-large .tag,
+html.fs-large .rc .rt,
+html.fs-large .rc .rs,
+html.fs-large .checks2 label,
+html.fs-large .feat p,
+html.fs-large .feat h3,
+html.fs-large .card-head h2,
+html.fs-large .card-head p,
+html.fs-large #out,
+html.fs-large .out-bar h3,
+html.fs-large .out-bar p,
+html.fs-large footer{font-size:115% !important}
+
+html.fs-xlarge body,
+html.fs-xlarge .card,
+html.fs-xlarge .field label,
+html.fs-xlarge .field select,
+html.fs-xlarge .field textarea,
+html.fs-xlarge .field input[type=text],
+html.fs-xlarge .tag,
+html.fs-xlarge .rc .rt,
+html.fs-xlarge .rc .rs,
+html.fs-xlarge .checks2 label,
+html.fs-xlarge .feat p,
+html.fs-xlarge .feat h3,
+html.fs-xlarge .card-head h2,
+html.fs-xlarge .card-head p,
+html.fs-xlarge #out,
+html.fs-xlarge .out-bar h3,
+html.fs-xlarge .out-bar p,
+html.fs-xlarge footer{font-size:130% !important}
+
+/* Überschriften & Hero mitskalieren */
+html.fs-large .hero h1{font-size:clamp(26px,4.8vw,48px) !important}
+html.fs-xlarge .hero h1{font-size:clamp(30px,5.4vw,54px) !important}
+html.fs-large .hero p{font-size:17px !important}
+html.fs-xlarge .hero p{font-size:19px !important}
+
+/* ── HOHER KONTRAST ─────────────────────────────────────── */
+html.high-contrast body{
+  background:#fff !important;
+  color:#000 !important;
+}
+html.high-contrast .card,
+html.high-contrast .feat,
+html.high-contrast .out-wrap,
+html.high-contrast .firm-banner{
+  background:#fff !important;
+  border-color:#000 !important;
+}
+html.high-contrast .field select,
+html.high-contrast .field textarea,
+html.high-contrast .field input[type=text],
+html.high-contrast .firm-input{
+  background:#fff !important;
+  border-color:#000 !important;
+  color:#000 !important;
+}
+html.high-contrast .card-head h2,
+html.high-contrast .card-head p,
+html.high-contrast .field label,
+html.high-contrast .feat h3,
+html.high-contrast .feat p,
+html.high-contrast .rc .rt,
+html.high-contrast .rc .rs,
+html.high-contrast .checks2 label,
+html.high-contrast #out{
+  color:#000 !important;
+}
+html.high-contrast .tag{
+  background:#fff !important;
+  border-color:#333 !important;
+  color:#000 !important;
+}
+html.high-contrast .tag.on{
+  background:#000 !important;
+  border-color:#000 !important;
+  color:#fff !important;
+}
+html.high-contrast .rc{
+  background:#fff !important;
+  border-color:#333 !important;
+}
+html.high-contrast .rc.on{
+  background:#000 !important;
+  border-color:#000 !important;
+}
+html.high-contrast .rc.on .rt{
+  color:#fff !important;
+}
+html.high-contrast .step{
+  background:#000 !important;
+  color:#fff !important;
+}
+html.high-contrast .hero{
+  background:#f0f0f0 !important;
+}
+html.high-contrast .hero h1,
+html.high-contrast .hero p{
+  color:#000 !important;
+}
+html.high-contrast .hero h1 em{
+  color:#000 !important;
+  text-decoration:underline;
+}
+html.high-contrast .badge{
+  background:#fff !important;
+  border-color:#000 !important;
+  color:#000 !important;
+}
+html.high-contrast .out-bar{
+  background:#000 !important;
+}
+html.high-contrast .gen-btn{
+  background:#000 !important;
+  color:#fff !important;
+  box-shadow:none !important;
+}
+html.high-contrast .btn-pdf{
+  background:#000 !important;
+  color:#fff !important;
+}
+html.high-contrast .btn-ol{
+  border-color:rgba(255,255,255,.7) !important;
+  color:#fff !important;
+}
 body{font-family:var(--fb);background:var(--bg);color:var(--t1);line-height:1.6}
 
 nav{position:sticky;top:0;z-index:100;background:#0B1F3B;backdrop-filter:blur(10px);border-bottom:none;padding:0 2rem;display:flex;align-items:center;justify-content:space-between;height:56px}
@@ -145,11 +279,11 @@ footer strong{color:rgba(255,255,255,.7)}
 <body>
 
 <nav>
-  <a class="logo" href="#">
-    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="height:28px;object-fit:contain;filter:brightness(1)">
+  <a href="https://makerport.de/" target="_blank" rel="noopener" style="display:flex;align-items:center;text-decoration:none;flex-shrink:0">
+    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="height:38px;object-fit:contain">
   </a>
-  <span style="font-family:var(--fd);font-size:14px;font-weight:600;color:rgba(255,255,255,.55);letter-spacing:.01em">KI-Kodex Generator</span>
-  <span class="nav-pill">Kostenlos · Kein Konto · Keine Speicherung</span>
+  <span style="position:absolute;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em;white-space:nowrap">KI-Kodex Generator</span>
+  <span class="nav-pill" style="flex-shrink:0">Kostenlos · Kein Konto · Keine Speicherung</span>
 </nav>
 
 <section class="hero">
@@ -436,8 +570,10 @@ footer strong{color:rgba(255,255,255,.7)}
 </main>
 
 <footer>
-  <div style="margin-bottom:12px">
-    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="height:32px;opacity:.7;margin-bottom:10px">
+  <div style="margin-bottom:14px">
+    <a href="https://makerport.de/" target="_blank" rel="noopener">
+      <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="height:46px;opacity:.85;margin-bottom:10px;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.85'">
+    </a>
   </div>
   <strong>KI-Kodex Generator</strong> · Ein Angebot des MakerPort Stralsund · Kein Server, keine Datenspeicherung<br>
   <span style="margin-top:4px;display:block;margin-bottom:14px">Kein Ersatz für Rechtsberatung. Rechtliche Grundlagen: EU AI Act (VO 2024/1689 Art. 4), DSGVO, BDSG | Stand Mai 2026</span>
@@ -1600,6 +1736,156 @@ function closeModal(){
   document.body.style.overflow = '';
 }
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+</script>
+
+<!-- ── COOKIE BANNER ─────────────────────────────────────── -->
+<div id="cookie-banner" role="dialog" aria-live="polite" aria-label="Cookie-Einstellungen" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:9000;background:#0B1F3B;color:#fff;padding:16px 24px;box-shadow:0 -4px 24px rgba(0,0,0,.22);font-family:var(--fb)">
+  <div style="max-width:960px;margin:0 auto;display:flex;align-items:center;gap:20px;flex-wrap:wrap">
+    <div style="flex:1;min-width:260px">
+      <p style="font-size:13px;line-height:1.65;color:rgba(255,255,255,.85);margin:0">
+        <strong style="color:#fff;font-weight:600">🍪 Cookies & Datenschutz</strong><br>
+        Diese Seite verwendet <strong style="color:#fff">ausschließlich technisch notwendige Ressourcen</strong> (Google Fonts, jsPDF-Bibliothek). Es werden keine Tracking- oder Analyse-Cookies gesetzt. Alle deine Eingaben bleiben lokal in deinem Browser — es werden keine Daten an unsere Server übertragen.
+        <a href="#" onclick="openModal('datenschutz');return false;" style="color:#7EDCEA;text-decoration:underline;margin-left:4px">Datenschutzerklärung</a>
+      </p>
+    </div>
+    <div style="display:flex;gap:10px;flex-shrink:0;flex-wrap:wrap">
+      <button onclick="cookieDecline()" style="padding:9px 18px;background:transparent;border:1.5px solid rgba(255,255,255,.3);border-radius:8px;color:rgba(255,255,255,.75);font-size:13px;font-weight:500;cursor:pointer;font-family:var(--fb);transition:all .15s" onmouseover="this.style.borderColor='rgba(255,255,255,.6)';this.style.color='#fff'" onmouseout="this.style.borderColor='rgba(255,255,255,.3)';this.style.color='rgba(255,255,255,.75)'">
+        Nur notwendige
+      </button>
+      <button onclick="cookieAccept()" style="padding:9px 20px;background:#00ABBE;border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:600;cursor:pointer;font-family:var(--fb);transition:background .15s" onmouseover="this.style.background='#008FA0'" onmouseout="this.style.background='#00ABBE'">
+        Verstanden ✓
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ── BARRIEREFREIHEITS-PANEL ──────────────────────────── -->
+<button id="a11y-toggle" onclick="toggleA11y()" aria-label="Barrierefreiheit" title="Barrierefreiheits-Optionen" style="position:fixed;bottom:24px;right:24px;z-index:8900;width:46px;height:46px;border-radius:50%;background:#0B1F3B;border:2px solid rgba(255,255,255,.15);color:#fff;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center;transition:background .15s" onmouseover="this.style.background='#00ABBE'" onmouseout="this.style.background='#0B1F3B'">
+  <img src="https://cdn-icons-png.flaticon.com/512/7118/7118029.png" alt="" aria-hidden="true" style="width:24px;height:24px;filter:invert(1);object-fit:contain">
+</button>
+
+<div id="a11y-panel" role="dialog" aria-label="Barrierefreiheits-Optionen" style="display:none;position:fixed;bottom:80px;right:24px;z-index:8900;background:#fff;border:0.5px solid #E0E4EA;border-radius:14px;padding:18px 20px;width:260px;box-shadow:0 8px 32px rgba(0,0,0,.14);font-family:var(--fb)">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+    <span style="font-family:var(--fd);font-size:14px;font-weight:700;color:#0B1F3B">Barrierefreiheit</span>
+    <button onclick="toggleA11y()" aria-label="Schließen" style="background:none;border:none;cursor:pointer;color:#8A9BB0;font-size:18px;line-height:1;padding:2px 4px">×</button>
+  </div>
+
+  <div style="margin-bottom:12px">
+    <div style="font-size:11px;font-weight:600;color:#8A9BB0;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Schriftgröße</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="setFontSize('normal')" id="fs-normal" style="flex:1;padding:7px;border:1.5px solid #E0E4EA;border-radius:7px;background:#FAFAFA;font-size:12px;cursor:pointer;color:#1C2D3D;font-family:var(--fb)">Normal</button>
+      <button onclick="setFontSize('large')"  id="fs-large"  style="flex:1;padding:7px;border:1.5px solid #E0E4EA;border-radius:7px;background:#FAFAFA;font-size:14px;cursor:pointer;color:#1C2D3D;font-family:var(--fb)">Groß</button>
+      <button onclick="setFontSize('xlarge')" id="fs-xlarge" style="flex:1;padding:7px;border:1.5px solid #E0E4EA;border-radius:7px;background:#FAFAFA;font-size:16px;cursor:pointer;color:#1C2D3D;font-family:var(--fb)">X-Groß</button>
+    </div>
+  </div>
+
+  <div style="margin-bottom:12px">
+    <div style="font-size:11px;font-weight:600;color:#8A9BB0;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Kontrast</div>
+    <div style="display:flex;gap:8px">
+      <button onclick="setContrast('normal')" id="ct-normal" style="flex:1;padding:7px;border:1.5px solid #E0E4EA;border-radius:7px;background:#FAFAFA;font-size:12px;cursor:pointer;color:#1C2D3D;font-family:var(--fb)">Standard</button>
+      <button onclick="setContrast('high')"   id="ct-high"   style="flex:1;padding:7px;border:1.5px solid #E0E4EA;border-radius:7px;background:#000;font-size:12px;cursor:pointer;color:#fff;font-weight:600;font-family:var(--fb)">Hoch</button>
+    </div>
+  </div>
+
+  <div>
+    <div style="font-size:11px;font-weight:600;color:#8A9BB0;text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Sonstiges</div>
+    <label style="display:flex;align-items:center;gap:9px;font-size:13px;color:#1C2D3D;cursor:pointer;margin-bottom:7px">
+      <input type="checkbox" id="a11y-links" onchange="toggleFocusOutlines(this.checked)" style="accent-color:#00ABBE;width:15px;height:15px">
+      Fokus-Rahmen sichtbar
+    </label>
+    <label style="display:flex;align-items:center;gap:9px;font-size:13px;color:#1C2D3D;cursor:pointer">
+      <input type="checkbox" id="a11y-motion" onchange="toggleMotion(this.checked)" style="accent-color:#00ABBE;width:15px;height:15px">
+      Animationen reduzieren
+    </label>
+  </div>
+
+  <div style="margin-top:14px;padding-top:12px;border-top:1px solid #E0E4EA;font-size:11px;color:#8A9BB0;line-height:1.5">
+    Einstellungen gelten nur für diese Sitzung. Bei Problemen: <a href="mailto:info@makerport.de" style="color:#00ABBE">info@makerport.de</a>
+  </div>
+</div>
+
+<script>
+// ── COOKIE LOGIC ────────────────────────────────────────────
+(function(){
+  if(!localStorage.getItem('cookie_consent')){
+    document.getElementById('cookie-banner').style.display='block';
+  }
+})();
+function cookieAccept(){
+  localStorage.setItem('cookie_consent','accepted');
+  document.getElementById('cookie-banner').style.display='none';
+}
+function cookieDecline(){
+  localStorage.setItem('cookie_consent','minimal');
+  document.getElementById('cookie-banner').style.display='none';
+}
+
+// ── ACCESSIBILITY LOGIC ─────────────────────────────────────
+function toggleA11y(){
+  const p=document.getElementById('a11y-panel');
+  const isOpen=p.style.display==='block';
+  p.style.display=isOpen?'none':'block';
+  document.getElementById('a11y-toggle').setAttribute('aria-expanded', !isOpen);
+}
+// Schließen bei Klick außerhalb
+document.addEventListener('click',function(e){
+  const panel=document.getElementById('a11y-panel');
+  const btn=document.getElementById('a11y-toggle');
+  if(panel.style.display==='block'&&!panel.contains(e.target)&&e.target!==btn&&!btn.contains(e.target)){
+    panel.style.display='none';
+  }
+});
+
+function setFontSize(size){
+  document.documentElement.classList.remove('fs-large','fs-xlarge');
+  if(size==='large') document.documentElement.classList.add('fs-large');
+  if(size==='xlarge') document.documentElement.classList.add('fs-xlarge');
+  ['fs-normal','fs-large','fs-xlarge'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.style.borderColor=id==='fs-'+size?'#00ABBE':'#E0E4EA';
+    el.style.background=id==='fs-'+size?'#E5F8FA':'#FAFAFA';
+  });
+}
+
+function setContrast(mode){
+  document.documentElement.classList.remove('high-contrast');
+  if(mode==='high'){
+    document.documentElement.classList.add('high-contrast');
+    document.getElementById('ct-high').style.outline='2px solid #00ABBE';
+    document.getElementById('ct-normal').style.outline='none';
+  } else {
+    document.getElementById('ct-normal').style.outline='2px solid #00ABBE';
+    document.getElementById('ct-high').style.outline='none';
+  }
+}
+
+function toggleFocusOutlines(on){
+  let styleEl=document.getElementById('a11y-focus-style');
+  if(on){
+    if(!styleEl){
+      styleEl=document.createElement('style');
+      styleEl.id='a11y-focus-style';
+      styleEl.textContent='*:focus{outline:3px solid #00ABBE !important;outline-offset:2px !important;}';
+      document.head.appendChild(styleEl);
+    }
+  } else {
+    if(styleEl)styleEl.remove();
+  }
+}
+
+function toggleMotion(on){
+  let styleEl=document.getElementById('a11y-motion-style');
+  if(on){
+    if(!styleEl){
+      styleEl=document.createElement('style');
+      styleEl.id='a11y-motion-style';
+      styleEl.textContent='*,*::before,*::after{animation-duration:.001ms !important;transition-duration:.001ms !important;}';
+      document.head.appendChild(styleEl);
+    }
+  } else {
+    if(styleEl)styleEl.remove();
+  }
+}
 </script>
 </body>
 </html>
