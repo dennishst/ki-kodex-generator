@@ -280,7 +280,7 @@ footer strong{color:rgba(255,255,255,.7)}
 
 <nav>
   <a href="https://makerport.de/" target="_blank" rel="noopener" style="display:flex;align-items:center;text-decoration:none;flex-shrink:0">
-    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="height:38px;object-fit:contain">
+    <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="width:180px;height:auto;object-fit:contain">
   </a>
   <span style="position:absolute;left:50%;transform:translateX(-50%);font-family:var(--fd);font-size:16px;font-weight:700;color:#fff;letter-spacing:.01em;white-space:nowrap">KI-Kodex Generator</span>
   <span class="nav-pill" style="flex-shrink:0">Kostenlos · Kein Konto · Keine Speicherung</span>
@@ -575,7 +575,7 @@ footer strong{color:rgba(255,255,255,.7)}
       <img src="https://makerport.de/wp-content/uploads/2025/01/Logo_dmv_makerport_neg_RGB-1-1-e1736245084994.png" alt="MakerPort Stralsund" style="height:46px;opacity:.85;margin-bottom:10px;transition:opacity .2s" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='.85'">
     </a>
   </div>
-  <strong>KI-Kodex Generator</strong> · Ein Angebot des MakerPort Stralsund · Kein Server, keine Datenspeicherung<br>
+  <strong>KI-Kodex Generator</strong> · Ein Angebot des MakerPort Stralsund · Mit Hilfe von KI erstellt<br>
   <span style="margin-top:4px;display:block;margin-bottom:14px">Kein Ersatz für Rechtsberatung. Rechtliche Grundlagen: EU AI Act (VO 2024/1689 Art. 4), DSGVO, BDSG | Stand Mai 2026</span>
   <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin-top:6px">
     <a href="#" onclick="openModal('datenschutz');return false;" style="color:rgba(255,255,255,.55);text-decoration:none;font-size:12px;border-bottom:1px solid rgba(255,255,255,.2);padding-bottom:1px">Datenschutz</a>
@@ -847,7 +847,6 @@ Prozessautomatisierung:
   // ── KODEX ZUSAMMENBAUEN ─────────────────────────────────
   const K = `INTERNER KI-KODEX
 ${BDisplay}
-WHITEPAPER · GOVERNANCE | Vertraulich – nur interner Gebrauch
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -1369,67 +1368,61 @@ function _buildPDF(){
   // ── INHALTSVERZEICHNIS — eigene Seite ────────────────────
   np();
 
-  // TOC-Überschrift
-  doc.setFontSize(14);doc.setFont('helvetica','bold');fc(NV);
+  // TOC-Überschrift — kein Balken, nur sauberer Titel
+  doc.setFontSize(16);doc.setFont('helvetica','bold');fc(NV);
   doc.text('Inhaltsverzeichnis',ML,y);
-  y+=4;
-  fd(NV);doc.setLineWidth(0.6);doc.line(ML,y,ML+CW,y);
-  y+=10;
+  y+=2;
+  fd([200,210,220]);doc.setLineWidth(0.4);doc.line(ML,y+2,ML+CW,y+2);
+  y+=12;
 
-  // TOC aus KODEX-Text extrahieren
-  const tocLines=KODEX.split('\n').filter(l=>/^\s{2}[\dA-Z][0-9a-z]*[\s·]/.test(l)||/^\s{2}A\s/.test(l)||/^\s{2}[A-Z]\s/.test(l));
+  // TOC Zeilen-Funktion: Nummer | Titel | Punkte-Leader bündig
+  function tocRow(num,title){
+    doc.setFontSize(10);
+    const numW=18;
+    const pageColW=8;
+    const textMaxW=CW-numW-pageColW-6;
 
-  // TOC Punkte-Leader Funktion
-  function tocRow(num,title,pageHint){
-    doc.setFontSize(9);
-    const numW=14; // Nummernspalte
-    const pageW=10; // Seitenzahl rechts (Platzhalter)
-    const textW=CW-numW-pageW-4;
-
-    // Nummer
+    // Nummer — bold, NV
     doc.setFont('helvetica','bold');fc(NV);
     doc.text(num,ML,y);
 
-    // Titel
+    // Titel — normal, TX
     doc.setFont('helvetica','normal');fc(TX);
-    const wrapped=doc.splitTextToSize(title,textW);
-    doc.text(wrapped[0],ML+numW,y);
+    doc.setFontSize(10);
+    const titleText=doc.splitTextToSize(title,textMaxW)[0];
+    doc.text(titleText,ML+numW,y);
 
-    // Punkt-Leader
-    const titleEndX=ML+numW+doc.getTextWidth(wrapped[0]);
-    const dotAreaEnd=ML+CW-pageW-2;
-    if(dotAreaEnd>titleEndX+4){
-      fc(MU);doc.setFontSize(8);
-      let dx=titleEndX+3;
-      while(dx<dotAreaEnd-3){doc.text('.',dx,y);dx+=2.2;}
-    }
+    // Punkt-Leader: von Titelende bis kurz vor rechten Rand
+    const titleW=doc.getTextWidth(titleText);
+    const dotStart=ML+numW+titleW+2.5;
+    const dotEnd  =ML+CW-pageColW-1;
+    doc.setFontSize(9);fc([190,198,210]);
+    let dx=dotStart;
+    while(dx<dotEnd-1.5){doc.text('.',dx,y-0.3);dx+=2.4;}
 
-    // Seite rechts (leer lassen — wird nach Render befüllt)
-    fc(MU);doc.setFontSize(8.5);
-    doc.text('—',ML+CW,y,{align:'right'});
-
-    fc(TX);y+=6;
+    y+=7.5;
   }
 
-  // Alle TOC-Zeilen aus dem KODEX parsen
-  const allLines=KODEX.split('\n');
-  let inTOC=false;
-  allLines.forEach(l=>{
-    const t2=l.trim();
-    if(t2==='INHALTSVERZEICHNIS'){inTOC=true;return;}
-    if(inTOC){
-      if(t2===''||/^[━─]{5,}/.test(t2)){inTOC=false;return;}
-      // Zeile parsen: "  01  Titel" oder "  07a Titel"
-      const m=t2.match(/^([\dA-Z][0-9a-z]*[a-z]?)\s{1,3}(.+)/);
-      if(m) tocRow(m[1],m[2]);
-    }
-  });
+  // TOC aus Kodex extrahieren
+  {
+    const allL=KODEX.split('\n');
+    let inT=false;
+    allL.forEach(l=>{
+      const t2=l.trim();
+      if(t2==='INHALTSVERZEICHNIS'){inT=true;return;}
+      if(inT){
+        if(t2===''||/^[━─]{5,}/.test(t2)){inT=false;return;}
+        const m=t2.match(/^([\dA-Z][0-9a-z]*)\s{1,4}(.+)/);
+        if(m)tocRow(m[1],m[2]);
+      }
+    });
+  }
 
-  y+=4;
-  hline(ML,ML+CW,y,0.2,LN);
-  y+=8;
+  y+=6;
+  fd([200,210,220]);doc.setLineWidth(0.3);doc.line(ML,y,ML+CW,y);
+  y+=7;
   doc.setFontSize(8);doc.setFont('helvetica','italic');fc(MU);
-  doc.text('Seitenzahlen nach der finalen Druckversion eintragen.',ML,y);
+  doc.text('Stand: Mai 2026 \u00B7 Version 1.0 \u00B7 Vertraulich – nur interner Gebrauch',ML,y);
 
   // ── HAUPTINHALT PARSEN ───────────────────────────────────
   let inGlossar=false;
@@ -1439,70 +1432,84 @@ function _buildPDF(){
   // Glossar: komplette Tabelle auf einmal rendern
   function flushGlossar(){
     if(!glossarBuf.length)return;
-    const TERM_W=54;
-    const DEF_W=CW-TERM_W-8;
-    const SEP_X=ML+TERM_W+3;
+    const TERM_W=52;
+    const DEF_W=CW-TERM_W-10;
+    const SEP_X=ML+TERM_W+4;
+    const PAD_TOP=5;   // Abstand Text von Zeilenoberrand
+    const LINE_H=5;    // Zeilenhöhe pro Textzeile
+    const PAD_BOT=4;   // Abstand unter Text
 
     // Tabellenkopf
-    ck(12);
-    ff([240,243,248]);fd([240,243,248]);
-    doc.rect(ML,y-4,CW,8,'F');
-    doc.setFontSize(8);doc.setFont('helvetica','bold');fc(NV);
-    doc.text('Begriff',ML+2,y);
-    doc.text('Bedeutung',SEP_X+1,y);
-    fd(LN);doc.setLineWidth(0.2);doc.line(SEP_X-1,y-4,SEP_X-1,y+4);
-    y+=7;
-    fd(LN);doc.setLineWidth(0.3);doc.line(ML,y-1,ML+CW,y-1);
-    y+=2;
+    ck(14);
+    const headY=y;
+    ff([232,237,245]);fd([232,237,245]);
+    doc.rect(ML,headY,CW,9,'F');
+    doc.setFontSize(8.5);doc.setFont('helvetica','bold');fc(NV);
+    doc.text('Begriff',ML+3,headY+6);
+    doc.text('Bedeutung',SEP_X+3,headY+6);
+    // Kopf-Trennlinie Spalte
+    fd([180,190,205]);doc.setLineWidth(0.25);
+    doc.line(SEP_X,headY,SEP_X,headY+9);
+    // Kopf-Unterlinie
+    fd([180,190,205]);doc.setLineWidth(0.4);
+    doc.line(ML,headY+9,ML+CW,headY+9);
+    y=headY+9;
 
     glossarBuf.forEach(([term,def],gi)=>{
       doc.setFontSize(8.5);
-      const termLines=doc.splitTextToSize(term,TERM_W-4);
-      const defLines =doc.splitTextToSize(def, DEF_W);
+      const termLines=doc.splitTextToSize(term,TERM_W-6);
+      const defLines =doc.splitTextToSize(def, DEF_W-4);
       const rows=Math.max(termLines.length,defLines.length);
-      const rowH=rows*5+5;
+      const rowH=PAD_TOP+rows*LINE_H+PAD_BOT;
 
-      // Seitenumbruch: Zeile komplett auf einer Seite halten
+      // Seitenumbruch: ganze Zeile auf einer Seite halten
       if(y+rowH>PH-MB){
         np();
-        // Tabellen-Kopf wiederholen
-        ff([240,243,248]);fd([240,243,248]);
-        doc.rect(ML,y-4,CW,8,'F');
-        doc.setFontSize(8);doc.setFont('helvetica','bold');fc(NV);
-        doc.text('Begriff',ML+2,y);
-        doc.text('Bedeutung',SEP_X+1,y);
-        fd(LN);doc.setLineWidth(0.2);doc.line(SEP_X-1,y-4,SEP_X-1,y+4);
-        y+=7;
-        fd(LN);doc.setLineWidth(0.3);doc.line(ML,y-1,ML+CW,y-1);
-        y+=2;
+        // Tabellenkopf wiederholen
+        const hY2=y;
+        ff([232,237,245]);fd([232,237,245]);
+        doc.rect(ML,hY2,CW,9,'F');
+        doc.setFontSize(8.5);doc.setFont('helvetica','bold');fc(NV);
+        doc.text('Begriff',ML+3,hY2+6);
+        doc.text('Bedeutung',SEP_X+3,hY2+6);
+        fd([180,190,205]);doc.setLineWidth(0.25);
+        doc.line(SEP_X,hY2,SEP_X,hY2+9);
+        fd([180,190,205]);doc.setLineWidth(0.4);
+        doc.line(ML,hY2+9,ML+CW,hY2+9);
+        y=hY2+9;
       }
 
-      // Zebra
+      const rowTop=y;
+      const textBaseY=rowTop+PAD_TOP+LINE_H-1; // Baseline der ersten Textzeile
+
+      // Zebra-Hintergrund
       if(gi%2===0){
-        ff([247,249,252]);fd([247,249,252]);
-        doc.rect(ML,y-3.5,CW,rowH,'F');
+        ff([248,250,253]);fd([248,250,253]);
+        doc.rect(ML,rowTop,CW,rowH,'F');
       }
 
-      // Begriff (bold)
+      // Spalten-Trennlinie (volle Zeilenhöhe, nicht über Text)
+      fd([210,218,228]);doc.setLineWidth(0.2);
+      doc.line(SEP_X,rowTop,SEP_X,rowTop+rowH);
+
+      // Begriff (bold, NV) — Text-Y relativ zur Zeile
       doc.setFont('helvetica','bold');fc(NV);doc.setFontSize(8.5);
-      termLines.forEach((tl,ti)=>doc.text(tl,ML+2,y+ti*5));
+      termLines.forEach((tl,ti)=>doc.text(tl,ML+3,textBaseY+ti*LINE_H));
 
-      // Trennlinie Spalte
-      fd([210,216,224]);doc.setLineWidth(0.2);
-      doc.line(SEP_X-1,y-3,SEP_X-1,y+rowH-2);
-
-      // Definition (normal)
+      // Definition (normal, TX)
       doc.setFont('helvetica','normal');fc(TX);doc.setFontSize(8.5);
-      defLines.forEach((dl,di)=>doc.text(dl,SEP_X+1,y+di*5));
+      defLines.forEach((dl,di)=>doc.text(dl,SEP_X+3,textBaseY+di*LINE_H));
 
-      y+=rowH;
-      // Trennlinie Zeile
-      fd(LN);doc.setLineWidth(0.15);doc.line(ML,y-1,ML+CW,y-1);
+      y=rowTop+rowH;
+
+      // Zeilentrenner (nach Text, nicht über ihn)
+      fd([210,218,228]);doc.setLineWidth(0.15);
+      doc.line(ML,y,ML+CW,y);
     });
 
     glossarBuf=[];
     inGlossar=false;
-    y+=4;
+    y+=5;
   }
 
   const bodyLines=KODEX.split('\n');
@@ -1583,20 +1590,39 @@ function _buildPDF(){
       const isOk =sym==='✔'||sym==='✓';
       const isBad=sym==='✘'||sym==='⊗';
       ck(9);
+      const CX=ML+3;  // Kreis-Mittelpunkt X
+      const CY=y-2;   // Kreis-Mittelpunkt Y (leicht über Baseline)
+      const CR=3.2;   // Radius
       const symCol=isOk?GR:isBad?RD:YL;
       // Farbiger Kreis
-      ff(symCol);fd(symCol);doc.circle(ML+2.8,y-1.8,2.9,'F');
-      // Icon: ✓ grün, ✘ rot, ! gelb
-      doc.setFontSize(isOk?9:isBad?9:10);doc.setFont('helvetica','bold');fc([255,255,255]);
-      const icon=isOk?'\u2713':isBad?'\u2717':'!';
-      doc.text(icon,ML+2.8,y-0.6,{align:'center'});
-      // Inhalt
+      ff(symCol);fd(symCol);doc.circle(CX,CY,CR,'F');
+      // Symbol exakt mittig — manuell mit getTextWidth zentrieren
+      doc.setFont('helvetica','bold');
+      if(isOk){
+        // Haken: Unicode ✓ — als normales Zeichen rendern
+        doc.setFontSize(7.5);fc([255,255,255]);
+        const icon='\u2713';
+        const iw2=doc.getTextWidth(icon);
+        doc.text(icon,CX-iw2/2,CY+2.2);
+      } else if(isBad){
+        // Kreuz: X als zwei Linien zeichnen — zuverlässiger als Unicode
+        fd([255,255,255]);doc.setLineWidth(0.8);
+        doc.line(CX-1.4,CY-1.4,CX+1.4,CY+1.4);
+        doc.line(CX+1.4,CY-1.4,CX-1.4,CY+1.4);
+      } else {
+        // Ausrufezeichen
+        doc.setFontSize(9);fc([255,255,255]);
+        const icon2='!';
+        const iw3=doc.getTextWidth(icon2);
+        doc.text(icon2,CX-iw3/2,CY+2.5);
+      }
+      // Inhalt rechts vom Kreis
       doc.setFontSize(9);doc.setFont('helvetica','normal');fc(TX);
-      const ww=doc.splitTextToSize(content,CW-10);
+      const ww=doc.splitTextToSize(content,CW-11);
       ww.forEach((wl,wi)=>{
         if(wi>0)ck(5.5);
-        if(/\[.+?\]/.test(wl)){fc(AM);doc.text(wl,ML+9,y);fc(TX);}
-        else{fc(TX);doc.text(wl,ML+9,y);}
+        if(/\[.+?\]/.test(wl)){fc(AM);doc.text(wl,ML+10,y);fc(TX);}
+        else{fc(TX);doc.text(wl,ML+10,y);}
         y+=5.2;
       });
       y+=1.5;return;
